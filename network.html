@@ -4,10 +4,8 @@
 <head>
     <title>Network</title>
 
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="node_modules/vis/dist/vis.js"></script>
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/vis/dist/vis.js"></script>
     <link href="node_modules/vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
 
     <link href="styles/main.css" rel="stylesheet" type="text/css" />
@@ -17,9 +15,11 @@
 
 <body onload="init()">
 
+    <div id="mynetwork" class="full-size"></div>
+
     <script type="text/javascript">
         function init() {
-            window.location.href = "/network.html";
+            musicapp.network.draw();
         }
     </script>
 </body>

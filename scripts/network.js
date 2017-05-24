@@ -2,18 +2,19 @@ var musicapp = musicapp || {};
 musicapp.network = (function() {
     var network = null;
     
-    function draw() {
-        var color = 'gray';
-        var len = undefined;
-
+    var nodes = [];
+    var edges = [];
+    
+    
+    function setRandomData() {
         var minimumNodesCount = 20;
         var maximumNodesCount = 50;
-
+        
         var nodesCount = musicapp.random.getRandomInt(minimumNodesCount, maximumNodesCount);
         var edgesCount = musicapp.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
 
-        var nodes = [];
-        var edges = [];
+        nodes = [];
+        edges = [];
 
         for (var i = 0; i < nodesCount; ++i) {
             nodes.push({
@@ -28,8 +29,11 @@ musicapp.network = (function() {
                 to: musicapp.random.getRandomInt(0, nodesCount)
             });
         }
-
-        // create a network
+    }
+    
+    function draw() {
+        setRandomData();
+        
         var container = document.getElementById('mynetwork');
         var data = {
             nodes: nodes,
