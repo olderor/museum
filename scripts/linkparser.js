@@ -1,5 +1,5 @@
-var musicapp = musicapp || {};
-musicapp.linkparser = (function() {
+var museum = museum || {};
+museum.linkparser = (function() {
     /*
     getLocation("http://example.com:3000/pathname/?param=value#hash");
     {

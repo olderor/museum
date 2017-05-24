@@ -1,5 +1,5 @@
-var musicapp = musicapp || {};
-musicapp.spotify = (function() {
+var museum = museum || {};
+museum.spotify = (function() {
     
     // TODO: hide
     var token = "BQCm16sEepHFWFkqcpdGaCISdu4NJU2QW9UCVa_-XtBUH470pCqPFA3ZCOEHgZ_rp_vBCgMnaL5v4TI0WFUIse5KM32UGV-dyVqmp0Cc0H6PcZzEDOmFiXAAZq41w4-xlW49nytc6WkosdWVxQHZojEvqvL_ytaiPCE";
@@ -11,7 +11,7 @@ musicapp.spotify = (function() {
      * Return playlist object with specified user_id and playlist_id that were retrieved from url.
     */
     function parsePlaylistUrl(playlist) {
-        var refParts = musicapp.linkparser.getLocation(playlist);
+        var refParts = museum.linkparser.getLocation(playlist);
         if (!refParts) {
             return null;
         }

@@ -1,5 +1,5 @@
-var musicapp = musicapp || {};
-musicapp.network = (function() {
+var museum = museum || {};
+museum.network = (function() {
     var network = null;
     
     var nodes = [];
@@ -10,8 +10,8 @@ musicapp.network = (function() {
         var minimumNodesCount = 20;
         var maximumNodesCount = 50;
         
-        var nodesCount = musicapp.random.getRandomInt(minimumNodesCount, maximumNodesCount);
-        var edgesCount = musicapp.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
+        var nodesCount = museum.random.getRandomInt(minimumNodesCount, maximumNodesCount);
+        var edgesCount = museum.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
 
         nodes = [];
         edges = [];
@@ -20,13 +20,13 @@ musicapp.network = (function() {
             nodes.push({
                 id: i,
                 label: '' + i,
-                group: musicapp.random.getRandomInt(0, nodesCount / 5)
+                group: museum.random.getRandomInt(0, nodesCount / 5)
             });
         }
         for (var i = 0; i < nodesCount; ++i) {
             edges.push({
-                from: musicapp.random.getRandomInt(0, nodesCount),
-                to: musicapp.random.getRandomInt(0, nodesCount)
+                from: museum.random.getRandomInt(0, nodesCount),
+                to: museum.random.getRandomInt(0, nodesCount)
             });
         }
     }

@@ -1,5 +1,5 @@
-var musicapp = musicapp || {};
-musicapp.random = (function () {
+var museum = museum || {};
+museum.random = (function () {
     function getRandom() {
         return Math.random();
     }
