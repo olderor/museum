@@ -52,3 +52,19 @@ body {
 #finish-button-container {
     padding-bottom: 30px;
 }
+
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.redirect-container {
+    height: 100%;
+}
+
+.redirect-info {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); /* or try 50% */
+}
