@@ -1,4 +1,5 @@
 var museum = museum || {};
+museum.waiting = museum.waiting || {};
 museum.waiting = (function() {
         var onAnimationDone = null;
         

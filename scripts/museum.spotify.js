@@ -1,8 +1,9 @@
 var museum = museum || {};
+museum.spotify = museum.spotify || {};
 museum.spotify = (function() {
 
     // TODO: hide
-    var token = "BQD4r6kTNa6rpEfuMJ2IPXK6S71KyiMDVHMTU5VhKRVdk15tDzzISS3XJ0J8CPW7HMnbUSSBi6xEua-orN_k8F4RoT_ke59ZzqhDJ6Xs-unZUV-PJHCSz7rRvVsI9JaCDiFEPaYL66tpTgACKzlJCQru5H3KIEN6aUE";
+    var token = "BQAvbX9ga05vsQeexO6blDwYoz80fcoamlg1aD-BsC4ARZQao8qSk6xAIBlV3wnWovBJZRILBvdB5-F6fpCfDDFt_a-mTWIFG786fza8jE1pCIiOxVgoUUvQjCPISbXfOtl8eopknnBDy9CQopUxwXuFDZ0G3xH28fk";
 
     var apiGetPlaylistInfoUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}";
 
@@ -11,7 +12,7 @@ museum.spotify = (function() {
      * Return playlist object with specified user_id and playlist_id that were retrieved from url.
      */
     function parsePlaylistUrl(playlist) {
-        var refParts = museum.linkparser.getLocation(playlist);
+        var refParts = museum.parser.getLinkLocation(playlist);
         if (!refParts) {
             return null;
         }
@@ -39,7 +40,7 @@ museum.spotify = (function() {
         };
     }
 
-    function getPlaylistInfo(playlistInfo, onDone) {
+    function getPlaylistInfo(playlistInfo, onDone, onError) {
         var url = apiGetPlaylistInfoUrl.formatUnicorn({
             user_id: playlistInfo.userId,
             playlist_id: playlistInfo.playlistId
@@ -53,18 +54,27 @@ museum.spotify = (function() {
             }
         }).done(function(data) {
             onDone(data, playlistInfo.guid);
-        }).fail(function(exception) {
-            alert("Fail. " + exception);
+        }).fail(function(xhr, err) {
+            var message = "Playlist error.";
+            if (xhr && xhr.statusText) {
+                message += " " + xhr.statusText + ".";
+            }
+            if (xhr && xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) {
+                message += " " + xhr.responseJSON.error.message;
+            }
+            message += " Check your playlist link: " + url;
+            onError(playlistInfo.guid, message);
         });
     }
 
-    function getPlaylistInfoFromUrl(playlistData, onDone) {
+    function getPlaylistInfoFromUrl(playlistData, onDone, onError) {
         var data = parsePlaylistUrl(playlistData.url);
         if (!data) {
+            onError(playlistData.guid, "Playlist error. Check your playlist link: " + playlistData.url);
             return null;
         }
         data["guid"] = playlistData.guid;
-        getPlaylistInfo(data, onDone);
+        getPlaylistInfo(data, onDone, onError);
     }
     return {
         parsePlaylistUrl: parsePlaylistUrl,

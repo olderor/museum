@@ -1,4 +1,5 @@
 var museum = museum || {};
+museum.random = museum.random || {};
 museum.random = (function() {
     function getRandom() {
         return Math.random();

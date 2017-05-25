@@ -1,4 +1,5 @@
 var museum = museum || {};
+museum.network = museum.network || {};
 museum.network = (function() {
     var network = null;
     

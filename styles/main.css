@@ -25,6 +25,7 @@ body {
     padding: 0 !important;
     padding-left: 20px !important;
     padding-top: 1.5rem !important;
+    max-width: 700px;
 }
 
 .playlist-label-loaded {
@@ -36,7 +37,7 @@ body {
 }
 
 .footer {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .playlist-image {
@@ -46,4 +47,8 @@ body {
 
 .preview {
     padding-left: 20px !important;
+}
+
+#finish-button-container {
+    padding-bottom: 30px;
 }
