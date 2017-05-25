@@ -1,9 +1,3 @@
-body {
-    color: #d3d3d3;
-    font: 12pt arial;
-    background-color: #222222;
-}
-
 html,
 body {
     padding: 0;
@@ -12,7 +6,36 @@ body {
     height: 100%;
 }
 
+body {
+    color: #d3d3d3;
+    font: 12pt arial;
+    background-color: #222222;
+}
+
 .full-size {
     width: 100%;
     height: 100%;
+}
+
+.spinner-orange {
+    border-color: #FF8400;
+}
+
+.playlist-label {
+    padding: 0 !important;
+    padding-left: 20px !important;
+    padding-top: 2rem !important;
+}
+
+.playlist-loading-item {
+    padding: 0 !important;
+}
+
+.spinner-container {
+    padding-top: 1rem !important;
+    padding-left: 20px !important;
+}
+
+.footer {
+    padding-top: 30px;
 }

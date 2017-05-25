@@ -24,7 +24,7 @@ museum.playlists = (function() {
         playlists.push(null);
         
         museum.spotify.getPlaylistInfoFromUrl(playlistUrls[playlists.length - 1], addPlaylistData);
-        $('#loading-playlist-template').tmpl({playlistUrl: playlistUrl}).appendTo('#playlists-list');
+        $('#loading-playlist-template').tmpl({playlistUrl: playlistUrl}).prependTo('#playlists-list');
     }
     
     return {
