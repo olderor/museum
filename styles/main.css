@@ -24,18 +24,26 @@ body {
 .playlist-label {
     padding: 0 !important;
     padding-left: 20px !important;
-    padding-top: 2rem !important;
+    padding-top: 1.5rem !important;
+}
+
+.playlist-label-loaded {
+    padding-top: 0.5rem !important;
 }
 
 .playlist-loading-item {
     padding: 0 !important;
 }
 
-.spinner-container {
-    padding-top: 1rem !important;
-    padding-left: 20px !important;
-}
-
 .footer {
     padding-top: 30px;
+}
+
+.playlist-image {
+    max-height: 52px;
+    max-width: 52px;
+}
+
+.preview {
+    padding-left: 20px !important;
 }

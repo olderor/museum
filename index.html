@@ -42,9 +42,13 @@
             </span>
         </div>
         <script id="loading-playlist-template" type="text/x-jquery-tmpl">
-            <div class="list-group-item playlist-loading-item">
-            <a href="${playlistUrl}" target="_blank" class='d-flex justify-content-start'>
-                <div class="p-2 spinner-container">
+            <div class="list-group-item playlist-loading-item" id="container-${guid}">
+            <a href="${url}" target="_blank" class='d-flex justify-content-start'>
+                <div class="p-2 preview" id='preview-${guid}'>
+                <div id='image-container-${guid}' style="display: none;">
+                    <img src="" alt="Playlist image" class="img-rounded playlist-image" id="image-${guid}" />
+                </div>
+                <div id='spinner-${guid}' class="spinner-container">
                 <!--DO NOT FORMAT THIS PART LUL-->
                 <div class="preloader-wrapper active">
                     <div class="spinner-layer spinner-red-only spinner-orange">
@@ -58,10 +62,11 @@
                     </div>
                 </div>
                 </div>
-                <div class="playlist-label p-2">Loading playlist ${playlistUrl}</div>
+                </div>
+                <div class="playlist-label p-2" id='label-${guid}'>Loading playlist ${url}</div>
                 </a>
                 <div class="ml-auto p-2">
-                    <button class="btn btn-danger" type="button">Delete</button>
+                    <button class="btn btn-danger" type="button" onclick="museum.playlists.deletePlaylist('${guid}');">Delete</button>
                 </div>
             </div>
         </script>
