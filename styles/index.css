@@ -1,13 +1,23 @@
-#logo-container {
-    overflow: hidden;
-    position: absolute;
-    top: 0;    
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #222222;
+
+.content {
+    width: 100%;
+    padding: 0 20%;
+    padding-top: 5%;
 }
 
-.data-container {
-    position: relative;
+.content #content-input {
+    padding-top: 60px;
+}
+
+.content label {
+    font-size: 2rem;
+    color: inherit;
+}
+
+.content input {
+    color: #ff8400;
+}
+
+.content input:focus {
+    color: white;
 }

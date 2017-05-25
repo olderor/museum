@@ -2,7 +2,7 @@ var museum = museum || {};
 museum.spotify = (function() {
     
     // TODO: hide
-    var token = "BQCm16sEepHFWFkqcpdGaCISdu4NJU2QW9UCVa_-XtBUH470pCqPFA3ZCOEHgZ_rp_vBCgMnaL5v4TI0WFUIse5KM32UGV-dyVqmp0Cc0H6PcZzEDOmFiXAAZq41w4-xlW49nytc6WkosdWVxQHZojEvqvL_ytaiPCE";
+    var token = "BQC330fpDo5nqp7_U2SugHI-qIguKc9JPCUevHE5WkNVNH7CpiU3RYGzJiQxooREXbcVxV-jP1MpXQ-oMb9YLXulk9l-Ro6sIPl7hS15Bm8oV4-JOExwgoAqIw4Cwr_4vRjE8KF5tzXACTIYlRRBvcB5MBPFDBtDELo";
     
     var apiGetPlaylistInfoUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}";
     
@@ -18,16 +18,16 @@ museum.spotify = (function() {
         var userId = null;
         var playlistId = null;
         var path = refParts.pathname.split('/');
-        for (var i = 0; i < path.len; ++i) {
+        for (var i = 0; i < path.length; ++i) {
             if (path[i] === "user") {
-                if (i + 1 == path.len) {
+                if (i + 1 == path.length) {
                     return null;
                 }
                 userId = path[++i];
                 continue;
             }
             if (path[i] === "playlist") {
-                if (i + 1 == path.len) {
+                if (i + 1 == path.length) {
                     return null;
                 }
                 playlistId = path[++i];
@@ -36,22 +36,30 @@ museum.spotify = (function() {
         return { userId: userId, playlistId: playlistId };
     }
     
-    function getPlaylistInfo(data) {
-        var url = apiGetPlaylistInfoUrl.formatUnicorn({ user_id: data.userId, playlist_id: data.playlistId });
+    function getPlaylistInfo(playlistInfo, onDone) {
+        var url = apiGetPlaylistInfoUrl.formatUnicorn({ 
+            user_id: playlistInfo.userId, 
+            playlist_id: playlistInfo.playlistId
+        });
+        
         $.ajax({
                 url: url,
                 type: 'get',
                 headers: {"Authorization": "Bearer " + token}
         }).done(function (data) {
-            console.log(data);
+            onDone(data, playlistInfo.index);
         }).fail(function (exception) {
             alert("Fail. " + exception); 
         });
     }
     
-    function getPlaylistInfoFromUrl(url) {
-        var data = parsePlaylistUrl(url);
-        getPlaylistInfo(data);
+    function getPlaylistInfoFromUrl(playlistData, onDone) {
+        var data = parsePlaylistUrl(playlistData.url);
+        if (!data) {
+            return null;
+        }
+        data["index"] = playlistData.index;
+        getPlaylistInfo(data, onDone);
     }
     return {
         parsePlaylistUrl: parsePlaylistUrl,

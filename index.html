@@ -5,44 +5,49 @@
     <title>Network</title>
 
     <link href="node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
+    <link href="node_modules/mdbootstrap/css/mdb.css" rel="stylesheet">
     <link href="node_modules/vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.tmpl.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="node_modules/mdbootstrap/js/tether.min.js"></script>
     <script type="text/javascript" src="node_modules/vis/dist/vis.js"></script>
 
 
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
     <link href="styles/main.css" rel="stylesheet" type="text/css" />
     <link href="styles/index.css" rel="stylesheet" type="text/css" />
 
     <script src="scripts/extensions.js"></script>
-    <script src="scripts/logo.js"></script>
     <script src="scripts/museum.linkparser.js"></script>
     <script src="scripts/museum.network.js"></script>
     <script src="scripts/museum.random.js"></script>
     <script src="scripts/museum.spotify.js"></script>
     <script src="scripts/museum.waiting.js"></script>
+    <script src="scripts/museum.playlists.js"></script>
 </head>
 
 <body onload="init()">
-    <div class="data-container full-size">
-        <div id="mynetwork" class="full-size"></div>
-        <div id="logo-container" class="full-size" style="display: none;">
-            <div id="logo" class="flex-center">
-                <img src="img/logo.png" alt="Logo">
-            </div>
+    <div style="">
+        <i id="icon" class="fa fa-angle-double-up" style="text-shadow: none; font-size: 150px; color: rgb(255, 132, 0); height: 175px; width: 175px; line-height: 175px; border-radius: 50%; text-align: center; background-color: rgb(0, 0, 0);"></i>
+    </div>
+    <div class="content">
+         <div class="md-form input-group" id="content-input">
+            <input type="text" class="form-control" id="spotify-text-input" placeholder="https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W">
+            <label for="spotify-text-input">Enter the link to the playlist:</label>
+            <span class="input-group-btn" style="padding-left: 5px;">
+                <button class="btn btn-primary btn-lg" type="button" id="add-playlist-button">Add</button>
+            </span>
         </div>
+        <script id="loading-playlist-template" type="text/x-jquery-tmpl">
+            <a href="${playlistUrl}" target="_blank" class='list-group-item'>Loading playlist ${playlistUrl}</a>
+        </script>
+        <div class="list-group" id="playlists-list"></div>
     </div>
     <script type="text/javascript">
         function init() {
-            museum.waiting.init(function() {
-                $('#mynetwork').addClass('animated fadeIn');
-                $('#mynetwork').show();
-            });
-            setTimeout(function() { museum.network.draw(); }, 1000);
+            museum.playlists.init();
         }
     </script>
 </body>
