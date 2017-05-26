@@ -94,18 +94,7 @@
     </div>
     <script type="text/javascript">
         function init() {
-            var url = window.location.href.replace('#', '?');
-            var error = museum.parser.getParameterByName('error', url);
-            if (error) {
-                window.location.href = "authorization.html";
-                return;
-            }
-            
-            var token = museum.parser.getParameterByName('access_token', url);
-            var tokenType = museum.parser.getParameterByName('token_type', url);
-            var expiresIn = museum.parser.getParameterByName('expires_in', url);
-            var refreshToken = museum.parser.getParameterByName('refresh_token', url);
-            museum.spotify.updateUserToken(token, tokenType, expiresIn, refreshToken);
+            museum.spotify.init();
             museum.playlists.init();
         }
     </script>
