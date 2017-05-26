@@ -54,9 +54,12 @@ body {
 }
 
 .absolute-center {
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .redirect-container {
@@ -77,10 +80,17 @@ body {
 .waiting-label {
     font-size: 50px;
     max-width: 600px;
+    padding-right: 50px;
 }
 
 .side-nav {
     background-color: inherit;
+}
+
+.side-nav {
+    transform: none !important;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
 }
 
 .logo-nav {
@@ -95,13 +105,14 @@ body {
 }
 
 .nav-item {
-    border-top: 1px solid rgba(153,153,153,.298039);
+    border-top: 1px solid rgba(153, 153, 153, .298039);
 }
 
 .nav-item-selected {
     color: #FF8400;
 }
 
-#mynetwork, #logo-container {
+#mynetwork,
+#logo-container {
     padding-left: 241px;
 }
