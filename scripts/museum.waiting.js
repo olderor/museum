@@ -40,7 +40,7 @@ museum.waiting = (function() {
             }
             $('#logo').addClass('pulse');
             $('#logo').addClass('infinite');
-            setTimeout(removeLogo, 3000);
+            // setTimeout(removeLogo, 3000);
         }
         function showLogo() {
             $('#logo').addClass('animated fadeInUp');

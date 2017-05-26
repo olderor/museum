@@ -8,8 +8,8 @@ museum.network = (function() {
     
     
     function setRandomData() {
-        var minimumNodesCount = 20;
-        var maximumNodesCount = 50;
+        var minimumNodesCount = 200;
+        var maximumNodesCount = 500;
         
         var nodesCount = museum.random.getRandomInt(minimumNodesCount, maximumNodesCount);
         var edgesCount = museum.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
