@@ -12,7 +12,7 @@ body {
     background-color: #222222;
 }
 
-canvas {
+canvas, .vis-network {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
