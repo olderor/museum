@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Museum | Wellcome</title>
+
+    <link rel='icon' type="image/png" href="img/logo.png" />
+    <link rel='shortcut icon' type="image/png" href="img/logo.png" />
+
+    <link href="libs/mdbootstrap/css/compiled.min.css" rel="stylesheet">
+    <link href="libs/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="libs/mdbootstrap/css/mdb.css" rel="stylesheet">
+    <link href="libs/vis/vis-network.min.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="libs/mdbootstrap/js/tether.min.js"></script>
+    <script type="text/javascript" src="libs/vis/vis.js"></script>
+
+
+    <link href="styles/main.css" rel="stylesheet" type="text/css" />
+    <link href="styles/index.css" rel="stylesheet" type="text/css" />
+    <link href="styles/network.css" rel="stylesheet" type="text/css" />
+
+    <script src="scripts/extensions.js"></script>
+    <script src="scripts/museum.parser.js"></script>
+    <script src="scripts/museum.network.js"></script>
+    <script src="scripts/museum.random.js"></script>
+    <script src="scripts/museum.spotify.js"></script>
+    <script src="scripts/museum.waiting.js"></script>
+    <script src="scripts/museum.playlists.js"></script>
+</head>
+
+<body onload="init()">
+
+    <div>
+        <ul id="slide-out" class="side-nav fixed custom-scrollbar ps-container">
+            <li class="nav-item">
+                <div class="logo-wrapper waves-light logo-nav">
+                    <img src="img/logo.png" class="img-fluid flex-center">
+                </div>
+            </li>
+            <li class="nav-item nav-item-selected" id="general-graph-item">
+                    <a class="collapsible-header waves-effect arrow-r">
+                        General graph
+                        <i class="fa fa-chevron-right rotate-icon"></i>
+                    </a>
+            </li>
+            <li class="nav-item" id="multipartite-graph-item">
+                    <a class="collapsible-header waves-effect arrow-r">
+                        Multipartite graph
+                        <i class="fa fa-chevron-right rotate-icon"></i>
+                    </a>
+            </li>
+            <li class="nav-item">
+                    <a class="collapsible-header waves-effect arrow-r">
+                        ???
+                        <i class="fa fa-chevron-right rotate-icon"></i>
+                    </a>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        function init() {
+            
+        }
+    </script>
+</body>
+
+</html>

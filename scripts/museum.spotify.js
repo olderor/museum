@@ -9,8 +9,7 @@ museum.spotify = (function() {
 
     var apiGetPlaylistInfoUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}";
     var apiGetAccessToken = "https://accounts.spotify.com/api/token";
-
-
+    
     /**
      * Takes playlist open url similar to https://open.spotify.com/user/{user_id}/playlist/{playlist_id}
      * Return playlist object with specified user_id and playlist_id that were retrieved from url.

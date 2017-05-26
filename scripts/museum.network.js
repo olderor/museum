@@ -32,7 +32,8 @@ museum.network = (function() {
         }
     }
 
-    function setPlaylistsData(playlists) {
+    function setPlaylistsDataNodes(playlists) {
+        nodes = [];
         var level = 0;
         for (var guid in playlists) {
             ++level;
@@ -55,13 +56,37 @@ museum.network = (function() {
                     image: museum.parser.getImageWithMinimumSize(track["album"])["url"],
                     group: guid,
                     shape: 'circularImage',
-                    level: level
+                    level: level,
+
+                    trackId: track["id"]
                 });
             }
         }
     }
 
-    function draw(onDrawingDone) {
+    function setPlaylistsDataEdges() {
+        edges = [];
+        for (var i = 0; i < nodes.length; ++i) {
+            for (var j = i + 1; j < nodes.length; ++j) {
+                if (nodes[i].trackId == nodes[j].trackId) {
+                    edges.push({
+                        from: nodes[i].id,
+                        to: nodes[j].id
+                    });
+                }
+            }
+        }
+    }
+
+    function setPlaylistsData(playlists) {
+        setPlaylistsDataNodes(playlists);
+        setPlaylistsDataEdges();
+    }
+
+    function draw(onDrawingDone, type) {
+        if (!type) {
+            type = 'general';
+        }
         var container = document.getElementById('mynetwork');
         var data = {
             nodes: nodes,
@@ -85,15 +110,17 @@ museum.network = (function() {
                 minVelocity: 0
             },
             layout: {
-                improvedLayout: false,
-                hierarchical: {
-                    enabled: true,
-                    direction: 'LR'
-                }
+                improvedLayout: false
             }
         };
+        if (type == 'multipartite') {
+            options.layout["hierarchical"] = {
+                enabled: true,
+                direction: 'LR'
+            };
+        }
         network = new vis.Network(container, data, options);
-        network.on('afterDrawing', onDrawingDone);
+        network.once('afterDrawing', onDrawingDone);
         network.stabilize(1000);
     }
 

@@ -78,3 +78,30 @@ body {
     font-size: 50px;
     max-width: 600px;
 }
+
+.side-nav {
+    background-color: inherit;
+}
+
+.logo-nav {
+    height: 175px !important;
+}
+
+.fa-chevron-right {
+    top: 20px;
+    position: absolute;
+    right: 0;
+    margin-right: 13px;
+}
+
+.nav-item {
+    border-top: 1px solid rgba(153,153,153,.298039);
+}
+
+.nav-item-selected {
+    color: #FF8400;
+}
+
+#mynetwork, #logo-container {
+    padding-left: 241px;
+}

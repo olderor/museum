@@ -2,10 +2,16 @@ var museum = museum || {};
 museum.playlists = museum.playlists || {};
 museum.playlists = (function() {
 
+    // guid->playlist data
     var playlists = {};
     var playlistUrls = [];
 
     var deletedPlaylists = [];
+
+    // id->genres
+    var artistGenres = {};
+
+    var type = null;
     
     function filterDeletedPlaylists() {
         for (var i = 0; i < deletedPlaylists.length; ++i) {
@@ -62,34 +68,42 @@ museum.playlists = (function() {
     }
     
     function showLoadingView() {
+        $('#mynetwork').empty();
         $('#loading-playlists-container').hide();
         $('#network-container').show();
         museum.waiting.init(function() {
             $('#mynetwork').addClass('animated fadeIn');
             $('#mynetwork').show();
         });
-        
+
         // Wait for fadeIn animation to avoid lags.
         setTimeout(function() {
             filterDeletedPlaylists();
             museum.network.setPlaylistsData(playlists);
-            museum.network.draw(museum.waiting.setProcessDone);
+            museum.network.draw(museum.waiting.setProcessDone, type);
         }, 1000);
     }
-    
+
     function hidePlaylists() {
         $('#loading-playlists-container').addClass('animated fadeOut');
         $('#loading-playlists-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', showLoadingView);
     }
 
-    function process() {
+    function process(graphType) {
+        type = graphType;
         hidePlaylists();
+    }
+    
+    function reprocess(graphType) {
+        type = graphType;
+        showLoadingView();
     }
 
     return {
         init: init,
         addPlaylistUrl: addPlaylistUrl,
         deletePlaylist: deletePlaylist,
-        process: process
+        process: process,
+        reprocess: reprocess
     };
 })();

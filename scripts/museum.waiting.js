@@ -5,10 +5,14 @@ museum.waiting = (function() {
         
         function animationDone() {
             $('#logo-container').hide();
+            $('#logo').removeClass('bounceOutUp');
             onAnimationDone();
+            museum.graphmanager.loadingDone();
         }
         
         function removeLogo() {
+            fadeInDone = false;
+            processDone = false;
             $('#logo').removeClass('pulse');
             $('#logo').removeClass('infinite');
             $('#logo').addClass('bounceOutUp');
