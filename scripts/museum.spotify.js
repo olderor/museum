@@ -57,7 +57,9 @@ museum.spotify = (function() {
                 "Authorization": "Bearer " + token
             }
         }).done(function(data) {
-            onDone(data, playlistInfo.guid);
+            data["url"] = url;
+            data["guid"] = playlistInfo.guid;
+            loadNextSongsIfNeed(data, onDone, onError);
         }).fail(function(xhr, err) {
             var message = "Playlist error.";
             if (xhr && xhr.statusText) {
@@ -100,6 +102,37 @@ museum.spotify = (function() {
         tokenType = museum.parser.getParameterByName('token_type', url);
         expiresIn = museum.parser.getParameterByName('expires_in', url);
         refreshToken = museum.parser.getParameterByName('refresh_token', url);
+    }
+    
+    
+    function loadNextSongsIfNeed(playlistData, onDone, onError) {
+        var nextUrl = playlistData["tracks"]["next"];
+        if (!nextUrl) {
+            onDone(playlistData);
+            return;
+        }
+        
+        $.ajax({
+            url: nextUrl,
+            type: 'get',
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        }).done(function(data) {
+            playlistData["tracks"]["items"] = playlistData["tracks"]["items"].concat(data["items"]);
+            playlistData["tracks"]["next"] = data["next"];
+            loadNextSongsIfNeed(playlistData, onDone, onError);
+        }).fail(function(xhr, err) {
+            var message = "Playlist error.";
+            if (xhr && xhr.statusText) {
+                message += " " + xhr.statusText + ".";
+            }
+            if (xhr && xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) {
+                message += " " + xhr.responseJSON.error.message;
+            }
+            message += " Check your playlist link: " + playlistData.url;
+            onError(playlistData.guid, message);
+        });
     }
 
     return {

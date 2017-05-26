@@ -35,7 +35,8 @@ museum.playlists = (function() {
         $('#label-' + guid).addClass('playlist-label-loaded');
     }
 
-    function addPlaylistData(playlistData, guid) {
+    function addPlaylistData(playlistData) {
+        var guid = playlistData.guid;
         playlists[guid] = playlistData;
         $('#spinner-' + guid).hide();
         $('#label-' + guid).text(playlistData["name"] + " by " + playlistData["owner"]["id"]);
