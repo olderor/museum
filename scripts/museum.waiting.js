@@ -41,11 +41,13 @@ museum.waiting = (function() {
             $('#logo').addClass('pulse');
             $('#logo').addClass('infinite');
         }
+        
         function showLogo() {
             $('#logo').addClass('animated fadeInUp');
             $('#logo').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', pulseLogo);
             $('#logo-container').show();
         }
+        
         function init(onDone) {
             onAnimationDone = onDone;
             showLogo();

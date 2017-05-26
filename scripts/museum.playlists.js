@@ -6,6 +6,12 @@ museum.playlists = (function() {
     var playlistUrls = [];
 
     var deletedPlaylists = [];
+    
+    function filterDeletedPlaylists() {
+        for (var i = 0; i < deletedPlaylists.length; ++i) {
+            playlists[deletedPlaylists[i]] = null;
+        }
+    }
 
     function init() {
         $('#add-playlist-button').click(function() {
@@ -13,20 +19,6 @@ museum.playlists = (function() {
             $('#spotify-text-input').val('');
             addPlaylistUrl(url);
         });
-    }
-
-    function getPlaylistImageUrl(playlistData) {
-        var images = playlistData["images"];
-        if (!images || images.length == 0) {
-            return null;
-        }
-        var image = images[0];
-        for (var i = 1; i < images.length; ++i) {
-            if (images[i]["height"] < image["height"]) {
-                image = images[i];
-            }
-        }
-        return image;
     }
 
     function addPlaylistError(guid, message) {
@@ -40,7 +32,7 @@ museum.playlists = (function() {
         playlists[guid] = playlistData;
         $('#spinner-' + guid).hide();
         $('#label-' + guid).text(playlistData["name"] + " by " + playlistData["owner"]["id"]);
-        var image = getPlaylistImageUrl(playlistData);
+        var image = museum.parser.getImageWithMinimumSize(playlistData);
         if (!image) {
             $('#label-' + guid).addClass('playlist-label-loaded');
             return;
@@ -76,7 +68,11 @@ museum.playlists = (function() {
             $('#mynetwork').addClass('animated fadeIn');
             $('#mynetwork').show();
         });
+        
+        // Wait for fadeIn animation to avoid lags.
         setTimeout(function() {
+            filterDeletedPlaylists();
+            museum.network.setPlaylistsData(playlists);
             museum.network.draw(museum.waiting.setProcessDone);
         }, 1000);
     }

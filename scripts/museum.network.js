@@ -32,9 +32,33 @@ museum.network = (function() {
         }
     }
     
+    function setPlaylistsData(playlists) {
+        for(var guid in playlists) {
+            var playlist = playlists[guid];
+            if (!playlist) {
+                continue;
+            }
+            var tracks = playlist["tracks"]["items"];
+            for (var i = 0; i < tracks.length; ++i) {
+                var track = tracks[i]["track"];
+                var artists = track["artists"];
+                var artistLabel = artists[0]["name"];
+                for (var j = 1; j < artists.length; ++j) {
+                    artistLabel += ", " + artists[j]["name"];
+                }
+                
+                nodes.push({
+                    id: track["id"],
+                    title: artistLabel + " - " + track["name"],
+                    image: museum.parser.getImageWithMinimumSize(track["album"])["url"],
+                    group: guid,
+                    shape: 'circularImage'
+                });
+            }
+        }
+    }
+    
     function draw(onDrawingDone) {
-        setRandomData();
-        
         var container = document.getElementById('mynetwork');
         var data = {
             nodes: nodes,
@@ -62,6 +86,8 @@ museum.network = (function() {
     }
 
     return {
+        setRandomData: setRandomData,
+        setPlaylistsData: setPlaylistsData,
         draw: draw
     };
 })();

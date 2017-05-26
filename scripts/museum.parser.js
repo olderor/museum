@@ -60,9 +60,25 @@ museum.parser = (function() {
             return ('Uncaught Error.\n' + jqXHR.responseText);
         }
     }
+
+    function getImageWithMinimumSize(data) {
+        var images = data["images"];
+        if (!images || images.length == 0) {
+            return null;
+        }
+        var image = images[0];
+        for (var i = 1; i < images.length; ++i) {
+            if (images[i]["height"] < image["height"]) {
+                image = images[i];
+            }
+        }
+        return image;
+    }
+    
     return {
         formatErrorMessage: formatErrorMessage,
         getLinkLocation: getLinkLocation,
-        getParameterByName: getParameterByName
+        getParameterByName: getParameterByName,
+        getImageWithMinimumSize: getImageWithMinimumSize
     };
 })();
