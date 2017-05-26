@@ -32,7 +32,7 @@ museum.network = (function() {
         }
     }
     
-    function draw() {
+    function draw(onDrawingDone) {
         setRandomData();
         
         var container = document.getElementById('mynetwork');
@@ -58,6 +58,7 @@ museum.network = (function() {
             }
         };
         network = new vis.Network(container, data, options);
+        network.on('afterDrawing', onDrawingDone);
     }
 
     return {

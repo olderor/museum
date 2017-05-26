@@ -76,7 +76,7 @@ museum.playlists = (function() {
             $('#mynetwork').show();
         });
         setTimeout(function() {
-            museum.network.draw();
+            museum.network.draw(museum.waiting.setProcessDone);
         }, 1000);
     }
     

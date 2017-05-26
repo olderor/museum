@@ -16,8 +16,28 @@ museum.waiting = (function() {
                 $('#logo').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', animationDone);
             }
         }
+        
+        var fadeInDone = false;
+        var processDone = false;
+        
+        function shouldEndAnimation() {
+            return fadeInDone && processDone;
+        }
+        
+        function setProcessDone() {
+            processDone = true;
+            if (shouldEndAnimation()) {
+                removeLogo();
+            }
+        }
+        
         function pulseLogo() {
             $('#logo').removeClass('fadeInUp');
+            fadeInDone = true;
+            if (shouldEndAnimation()) {
+                removeLogo();
+                return;
+            }
             $('#logo').addClass('pulse');
             $('#logo').addClass('infinite');
             setTimeout(removeLogo, 3000);
@@ -32,6 +52,7 @@ museum.waiting = (function() {
             showLogo();
         }
     return {
-        init: init
+        init: init,
+        setProcessDone: setProcessDone
     };
 })();
