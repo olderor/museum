@@ -2,15 +2,15 @@ var museum = museum || {};
 museum.network = museum.network || {};
 museum.network = (function() {
     var network = null;
-    
+
     var nodes = [];
     var edges = [];
-    
-    
+
+
     function setRandomData() {
         var minimumNodesCount = 20;
         var maximumNodesCount = 50;
-        
+
         var nodesCount = museum.random.getRandomInt(minimumNodesCount, maximumNodesCount);
         var edgesCount = museum.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
 
@@ -31,9 +31,11 @@ museum.network = (function() {
             });
         }
     }
-    
+
     function setPlaylistsData(playlists) {
-        for(var guid in playlists) {
+        var level = 0;
+        for (var guid in playlists) {
+            ++level;
             var playlist = playlists[guid];
             if (!playlist) {
                 continue;
@@ -46,18 +48,19 @@ museum.network = (function() {
                 for (var j = 1; j < artists.length; ++j) {
                     artistLabel += ", " + artists[j]["name"];
                 }
-                
+
                 nodes.push({
                     id: guid + "-" + track["id"],
                     title: artistLabel + " - " + track["name"],
                     image: museum.parser.getImageWithMinimumSize(track["album"])["url"],
                     group: guid,
-                    shape: 'circularImage'
+                    shape: 'circularImage',
+                    level: level
                 });
             }
         }
     }
-    
+
     function draw(onDrawingDone) {
         var container = document.getElementById('mynetwork');
         var data = {
@@ -78,14 +81,20 @@ museum.network = (function() {
                 width: 2
             },
             physics: {
+                enabled: true,
                 minVelocity: 0
             },
             layout: {
-                improvedLayout: false
+                improvedLayout: false,
+                hierarchical: {
+                    enabled: true,
+                    direction: 'LR'
+                }
             }
         };
         network = new vis.Network(container, data, options);
         network.on('afterDrawing', onDrawingDone);
+        network.stabilize(1000);
     }
 
     return {
