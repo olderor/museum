@@ -8,8 +8,8 @@ museum.network = (function() {
     
     
     function setRandomData() {
-        var minimumNodesCount = 200;
-        var maximumNodesCount = 500;
+        var minimumNodesCount = 20;
+        var maximumNodesCount = 50;
         
         var nodesCount = museum.random.getRandomInt(minimumNodesCount, maximumNodesCount);
         var edgesCount = museum.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
@@ -79,6 +79,9 @@ museum.network = (function() {
             },
             physics: {
                 minVelocity: 0
+            },
+            layout: {
+                improvedLayout: false
             }
         };
         network = new vis.Network(container, data, options);

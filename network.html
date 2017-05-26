@@ -4,14 +4,14 @@
 <head>
     <title>Network</title>
 
-    <link href="node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
-    <link href="node_modules/vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <link href="libs/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="libs/mdbootstrap/css/mdb.min.css" rel="stylesheet">
+    <link href="libs/vis/vis-network.min.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="node_modules/mdbootstrap/js/tether.min.js"></script>
-    <script type="text/javascript" src="node_modules/vis/dist/vis.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="libs/mdbootstrap/js/tether.min.js"></script>
+    <script type="text/javascript" src="libs/vis/vis.js"></script>
 
 
 
@@ -42,7 +42,10 @@
                 $('#mynetwork').addClass('animated fadeIn');
                 $('#mynetwork').show();
             });
-            setTimeout(function() { museum.network.draw(); }, 1000);
+            setTimeout(function() { 
+                museum.network.setRandomData();
+                museum.network.draw(museum.waiting.setProcessDone);
+            }, 1000);
         }
     </script>
 </body>
