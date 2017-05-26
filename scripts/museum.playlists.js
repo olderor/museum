@@ -55,7 +55,7 @@ museum.playlists = (function() {
     }
 
     function deletePlaylist(guid) {
-        deletedPlaylists[guid] = true;
+        deletedPlaylists.push(guid);
         $('#container-' + guid).slideUp(250, function() {
             $(this).remove();
         });

@@ -48,7 +48,7 @@ museum.network = (function() {
                 }
                 
                 nodes.push({
-                    id: track["id"],
+                    id: guid + "-" + track["id"],
                     title: artistLabel + " - " + track["name"],
                     image: museum.parser.getImageWithMinimumSize(track["album"])["url"],
                     group: guid,
