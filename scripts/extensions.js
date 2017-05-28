@@ -16,3 +16,19 @@ function () {
 
     return str;
 };
+
+Array.prototype.resize = Array.prototype.resize || function(newSize, defaultValue) {
+    while(newSize > this.length) {
+        this.push(defaultValue);
+    }
+    this.length = newSize;
+};
+
+Array.prototype.resizeMatrix = Array.prototype.resizeMatrix || function(rowsSize, columnsSize, defaultValue) {
+    while(rowsSize > this.length) {
+        var row = [];
+        row.resize(columnsSize, defaultValue);
+        this.push(row);
+    }
+    this.length = rowsSize;
+};

@@ -32,6 +32,9 @@
     <script src="scripts/museum.playlists.js"></script>
     <script src="scripts/museum.graphmanager.js"></script>
     <script src="scripts/museum.graphmanager.types.js"></script>
+    <script src="scripts/museum.algorithms.search.js"></script>
+    <script src="scripts/museum.algorithms.quicksort.js"></script>
+    <script src="scripts/museum.algorithms.global_min_cut.js"></script>
 </head>
 
 <body onload="init()">
@@ -86,7 +89,10 @@
         <div class="align-self-center" style="width: 100%;">
         <ul>
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">
-                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4" onclick="museum.network.stabilize();">Stabilize</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.stabilize();">Stabilize</button>
+            </li>
+            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.split();">Split</button>
             </li>
             <li class="nav-item"></li>
         </ul>
@@ -103,7 +109,7 @@
     </div>
     <div class="content">
         <div class="md-form input-group" id="content-input">
-            <input type="text" class="form-control" id="spotify-text-input" placeholder="https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W">
+            <input type="text" class="form-control" id="spotify-text-input" placeholder="For example, https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W">
             <label for="spotify-text-input">Enter the link to the playlist:</label>
             <span class="input-group-btn" style="padding-left: 5px;">
                 <button class="btn btn-success btn-lg waves-effect waves-light z-depth-4" type="button" id="add-playlist-button">Add</button>

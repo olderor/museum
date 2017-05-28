@@ -3,12 +3,21 @@ museum.network = museum.network || {};
 museum.network = (function() {
     var network = null;
 
-    var nodes = [];
-    var edges = [];
+    var nodes = null;
+    var edges = null;
 
     var onDrawingDone = null;
 
     var playlists = {};
+    
+    function setDataToArray(data) {
+        var dataIds = data.getIds();
+        var allData = [];
+        for (var i = 0; i < dataIds.length; ++i) {
+            allData.push(data.get(dataIds[i]));
+        }
+        return allData;
+    }
 
     function setRandomData() {
         var minimumNodesCount = 20;
@@ -17,18 +26,18 @@ museum.network = (function() {
         var nodesCount = museum.random.getRandomInt(minimumNodesCount, maximumNodesCount);
         var edgesCount = museum.random.getRandomInt(minimumNodesCount * (minimumNodesCount - 1) / 2 / 2, nodesCount * (nodesCount - 1) / 2);
 
-        nodes = [];
-        edges = [];
+        nodes = new vis.DataSet();
+        edges = new vis.DataSet();
 
         for (var i = 0; i < nodesCount; ++i) {
-            nodes.push({
+            nodes.add({
                 id: i,
                 label: '' + i,
                 group: museum.random.getRandomInt(0, nodesCount / 5)
             });
         }
         for (var i = 0; i < nodesCount; ++i) {
-            edges.push({
+            edges.add({
                 from: museum.random.getRandomInt(0, nodesCount),
                 to: museum.random.getRandomInt(0, nodesCount)
             });
@@ -36,7 +45,7 @@ museum.network = (function() {
     }
 
     function setTracksNodes() {
-        nodes = [];
+        nodes = new vis.DataSet();
         var level = 0;
         for (var guid in playlists) {
             ++level;
@@ -59,7 +68,7 @@ museum.network = (function() {
                     imageUrl = image["url"];
                 }
 
-                nodes.push({
+                nodes.add({
                     id: museum.random.guid(),
                     title: artistLabel + " - " + track["name"],
                     image: imageUrl,
@@ -74,13 +83,18 @@ museum.network = (function() {
     }
 
     function setTracksEdges() {
-        edges = [];
-        for (var i = 0; i < nodes.length; ++i) {
-            for (var j = i + 1; j < nodes.length; ++j) {
-                if (nodes[i].trackId == nodes[j].trackId) {
-                    edges.push({
-                        from: nodes[i].id,
-                        to: nodes[j].id
+        edges = new vis.DataSet();
+        var allNodes = setDataToArray(nodes);
+        for (var i = 0; i < allNodes.length; ++i) {
+            for (var j = i + 1; j < allNodes.length; ++j) {
+                if (allNodes[i].trackId == allNodes[j].trackId) {
+                    edges.add({
+                        from: allNodes[i].id,
+                        to: allNodes[j].id,
+
+                        fromNodeIndex: i,
+                        toNodeIndex: j,
+                        edgeValue: 1
                     });
                 }
             }
@@ -94,7 +108,7 @@ museum.network = (function() {
 
 
     function setPlaylistsNodes() {
-        nodes = [];
+        nodes = new vis.DataSet();;
         for (var guid in playlists) {
             var playlist = playlists[guid];
             if (!playlist) {
@@ -107,7 +121,7 @@ museum.network = (function() {
                 imageUrl = image["url"];
             }
 
-            nodes.push({
+            nodes.add({
                 id: guid,
                 title: playlist["name"] + " by " + playlist["owner"]["id"],
                 image: imageUrl,
@@ -137,18 +151,25 @@ museum.network = (function() {
     }
 
     function setPlaylistsEdges() {
-        for (var i = 0; i < nodes.length; ++i) {
-            for (var j = i + 1; j < nodes.length; ++j) {
+        edges = new vis.DataSet();
+        var nodesIds = nodes.getIds();
+        var allNodes = setDataToArray(nodes);
+        for (var i = 0; i < allNodes.length; ++i) {
+            for (var j = i + 1; j < allNodes.length; ++j) {
                 var count = getSimilarTracksCount(
-                    playlists[nodes[i].id]["tracks"]["items"],
-                    playlists[nodes[j].id]["tracks"]["items"]);
+                    playlists[allNodes[i].id]["tracks"]["items"],
+                    playlists[allNodes[j].id]["tracks"]["items"]);
                 if (count == 0) {
                     continue;
                 }
-                edges.push({
-                    from: nodes[i].id,
-                    to: nodes[j].id,
-                    label: '' + count
+                edges.add({
+                    from: allNodes[i].id,
+                    to: allNodes[j].id,
+                    label: '' + count,
+
+                    fromNodeIndex: i,
+                    toNodeIndex: j,
+                    edgeValue: count
                 });
             }
         }
@@ -212,7 +233,9 @@ museum.network = (function() {
                 options.layout["hierarchical"] = {
                     enabled: true,
                     direction: 'LR',
-                    treeSpacing: 50
+                    treeSpacing: 50,
+                    nodeDistance: 50,
+                    centralGravity: 50
                 };
                 setTracksNodes();
                 setTracksEdges();
@@ -231,11 +254,28 @@ museum.network = (function() {
         network = new vis.Network(container, data, options);
         network.once('afterDrawing', drawingDone);
     }
-
+    
+    
+    function split() {
+        var allNodes = setDataToArray(nodes);
+        var allEdges = setDataToArray(edges);
+        museum.algorithms.global_min_cut.setData(allNodes, allEdges);
+        var part = museum.algorithms.global_min_cut.getMincutPartNodes();
+        part = museum.algorithms.quick_sort.quickSort(part);
+        for (var i = 0; i < allEdges.length; ++i) {
+            var indexFrom = museum.algorithms.search.binarySearch(part, allEdges[i].fromNodeIndex);
+            var indexTo = museum.algorithms.search.binarySearch(part, allEdges[i].toNodeIndex);
+            if (indexFrom == -1 && indexTo != -1 || indexFrom != -1 && indexTo == -1) {
+                edges.remove(allEdges[i].id);
+            }
+        }
+    }
+    
     return {
         setRandomData: setRandomData,
         setPlaylistsData: setPlaylistsData,
         draw: draw,
-        stabilize: stabilize
+        stabilize: stabilize,
+        split: split
     };
 })();

@@ -127,3 +127,7 @@ canvas, .vis-network {
 #logo-container {
     padding: 0 240px;
 }
+
+.option-button {
+    width: 150px;
+}
