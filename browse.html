@@ -31,37 +31,42 @@
     <script src="scripts/museum.waiting.js"></script>
     <script src="scripts/museum.playlists.js"></script>
     <script src="scripts/museum.graphmanager.js"></script>
+    <script src="scripts/museum.graphmanager.types.js"></script>
 </head>
 
 <body onload="init()">
     
-    <!--Graph playlists-->
     <div id="network-container" class="data-container full-size" style="display: none;">
-        <ul id="slide-out" class="side-nav fixed custom-scrollbar ps-container">
+        
+        
+        <!--Graph navigation-->
+        <ul class="side-nav fixed custom-scrollbar ps-container">
             <li class="nav-item">
                 <div class="logo-wrapper waves-light logo-nav">
                     <img src="img/logo.png" class="img-fluid flex-center">
                 </div>
             </li>
-            <li class="nav-item nav-item-selected" id="general-graph-item">
+            <li class="nav-item nav-item-selected" id="tracks-general-graph-item">
                     <a class="collapsible-header waves-effect arrow-r">
-                        General graph
+                        Tracks general graph
                         <i class="fa fa-chevron-right rotate-icon"></i>
                     </a>
             </li>
-            <li class="nav-item" id="multipartite-graph-item">
+            <li class="nav-item" id="tracks-multipartite-graph-item">
                     <a class="collapsible-header waves-effect arrow-r">
-                        Multipartite graph
+                        Tracks multipartite graph
                         <i class="fa fa-chevron-right rotate-icon"></i>
                     </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="playlists-general-graph-item">
                     <a class="collapsible-header waves-effect arrow-r">
-                        ???
+                        Playlists general graph
                         <i class="fa fa-chevron-right rotate-icon"></i>
                     </a>
             </li>
+            <li class="nav-item"></li>
         </ul>
+        
         <div id="mynetwork" class="full-size"></div>
         <div id="logo-container" class="full-size" style="display: none;">
             <div class="flex-center">
@@ -70,11 +75,25 @@
                 </div>
                 <br />
                 <div class="waiting-label">
-                    Processing your data...<br />This might take a while.
+                    Processing your data...<br /><br />This might take a while.
                 </div>
             </div>
         </div>
+        
+        
+        <!--Graph navigation-->
+        <div class="side-nav fixed right-aligned custom-scrollbar ps-container d-flex">
+        <div class="align-self-center" style="width: 100%;">
+        <ul>
+            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4" onclick="museum.network.stabilize();">Stabilize</button>
+            </li>
+            <li class="nav-item"></li>
+        </ul>
+        </div>
+        </div>
     </div>
+    
     
     
     <!--Loading playlists-->

@@ -6,7 +6,9 @@ museum.waiting = (function() {
         function animationDone() {
             $('#logo-container').hide();
             $('#logo').removeClass('bounceOutUp');
-            onAnimationDone();
+            if (onAnimationDone) {
+                onAnimationDone();
+            }
             museum.graphmanager.loadingDone();
         }
         
@@ -16,9 +18,7 @@ museum.waiting = (function() {
             $('#logo').removeClass('pulse');
             $('#logo').removeClass('infinite');
             $('#logo').addClass('bounceOutUp');
-            if (onAnimationDone) {
-                $('#logo').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', animationDone);
-            }
+            $('#logo').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', animationDone);
         }
         
         var fadeInDone = false;

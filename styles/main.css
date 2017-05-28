@@ -89,7 +89,7 @@ canvas, .vis-network {
 }
 
 .waiting-label {
-    font-size: 50px;
+    font-size: 30px;
     max-width: 600px;
     padding-right: 50px;
 }
@@ -125,5 +125,5 @@ canvas, .vis-network {
 
 #mynetwork,
 #logo-container {
-    padding-left: 241px;
+    padding: 0 240px;
 }
