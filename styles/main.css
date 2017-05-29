@@ -89,7 +89,7 @@ canvas, .vis-network {
 }
 
 .waiting-label {
-    font-size: 30px;
+    font-size: 200%;
     max-width: 600px;
     padding-right: 50px;
 }
@@ -130,4 +130,9 @@ canvas, .vis-network {
 
 .option-button {
     width: 150px;
+}
+
+.logo-img {
+    width: 350px;
+    height: 350px;
 }
