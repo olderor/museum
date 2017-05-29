@@ -89,6 +89,15 @@
         <div class="align-self-center" style="width: 100%;">
         <ul>
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+              <div class="switch vertices-switch-container">
+                <div>Show vertices without edges</div>
+                <label class="vertices-switch d-flex justify-content-center">
+                  <input type="checkbox" onclick="museum.network.filterVertices(this.checked);">
+                  <span class="lever"></span>
+                </label>
+              </div>
+            </li>
+            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.stabilize();">Stabilize</button>
             </li>
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">

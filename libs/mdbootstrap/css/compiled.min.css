@@ -18989,11 +18989,11 @@ select:disabled {
 }
 
 .switch label input[type=checkbox]:checked+.lever {
-    background-color: #dccfe2
+    background-color: white
 }
 
 .switch label input[type=checkbox]:checked+.lever:after {
-    background-color: #a6c
+    background-color: #FF8400
 }
 
 .switch label .lever {
@@ -19024,8 +19024,8 @@ select:disabled {
 }
 
 input[type=checkbox]:checked:not(:disabled)~.lever:active:after {
-    -webkit-box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .4), 0 0 0 15px rgba(170, 102, 204, .1);
-    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .4), 0 0 0 15px rgba(170, 102, 204, .1)
+    -webkit-box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .4), 0 0 0 15px rgba(255, 132, 0, .1);
+    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, .4), 0 0 0 15px rgba(255, 132, 0, .1)
 }
 
 input[type=checkbox]:not(:disabled)~.lever:active:after {

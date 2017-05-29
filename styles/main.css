@@ -136,3 +136,11 @@ canvas, .vis-network {
     width: 350px;
     height: 350px;
 }
+
+.vertices-switch-container {
+    padding: 20px 10px;
+}
+
+.vertices-switch {
+    padding-top: 10px;
+}

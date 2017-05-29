@@ -10,6 +10,10 @@ museum.network = (function() {
 
     var playlists = {};
     
+    var verticesWithoutEdges = [];
+    
+    var shouldShowVerticesWithoutEdges = false;
+    
     function setDataToArray(data) {
         var dataIds = data.getIds();
         var allData = [];
@@ -250,7 +254,11 @@ museum.network = (function() {
             nodes: nodes,
             edges: edges
         };
-
+        
+        if (!shouldShowVerticesWithoutEdges) {
+            removeVerticesWithoutEdges();
+        }
+        
         network = new vis.Network(container, data, options);
         network.once('afterDrawing', drawingDone);
     }
@@ -266,11 +274,51 @@ museum.network = (function() {
         }
     }
     
+    function removeVerticesWithoutEdges() {
+        verticesWithoutEdges = [];
+        var allNodes = setDataToArray(nodes);
+        var allEdges = setDataToArray(edges);
+        
+        var verticesHaveEdges = [];
+        verticesHaveEdges.resize(allNodes.length, false);
+        for (var i = 0; i < allEdges.length; ++i) {
+            verticesHaveEdges[allEdges[i].fromNodeIndex] = true;
+            verticesHaveEdges[allEdges[i].toNodeIndex] = true;
+        }
+        
+        for (var i = 0; i < allNodes.length; ++i) {
+            if (verticesHaveEdges[i]) {
+                continue;
+            }
+            var node = nodes.get(allNodes[i].id);
+            verticesWithoutEdges.push(node);
+            nodes.remove(node.id);
+        }
+    }
+    
+    function showVerticesWithoutEdges() {
+        for (var i = 0; i < verticesWithoutEdges.length; ++i) {
+            nodes.add(verticesWithoutEdges[i]);
+        }
+        verticesWithoutEdges = [];
+    }
+    
+    function filterVertices(withEdgesState) {
+        if (withEdgesState) {
+            shouldShowVerticesWithoutEdges = true;
+            showVerticesWithoutEdges();
+        } else {
+            shouldShowVerticesWithoutEdges = false;
+            removeVerticesWithoutEdges();
+        }
+    }
+    
     return {
         setRandomData: setRandomData,
         setPlaylistsData: setPlaylistsData,
         draw: draw,
         stabilize: stabilize,
-        split: split
+        split: split,
+        filterVertices: filterVertices
     };
 })();
