@@ -10,7 +10,9 @@ Example:<br />
 * pink-floyd fan https://open.spotify.com/user/museum-test/playlist/66bEDZ7YvY4Q9hrnGB7tGD 
 * 🤑💰🤑💰🤑 https://open.spotify.com/user/museum-test/playlist/1VPXpDfeaqcKxX1IvZidUH 
 * classic https://open.spotify.com/user/museum-test/playlist/3G9GTSdFQMP0qep2Z1xOot 
-* rock classic https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWXRqgorJj26U <br /><br />
+* rock classic https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWXRqgorJj26U 
+* Bach https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWZnzwzLBft6A 
+* Mozart https://open.spotify.com/user/museum-test/playlist/5Y94uhTQYOZv0mRb9BWtWk <br /><br />
 Example:<br />
 * https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W
 * https://open.spotify.com/user/olderor/playlist/5U4XO9ATcEA7xHGiSIgZUH
