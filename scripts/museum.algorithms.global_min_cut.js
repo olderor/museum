@@ -3,30 +3,43 @@ museum.algorithms = museum.algorithms || {};
 museum.algorithms.global_min_cut = museum.algorithms.global_min_cut || {};
 museum.algorithms.global_min_cut = (function() {
 
-    var nodes;
-    var edges;
-
-    var graph;
+    var allNodes;
+    var allEdges;
 
     var bestCost;
     var bestCut;
-
-    function initGraph() {
-        graph = [];
+    
+    var graphPartsIndexes;
+    var graphParts;
+    
+    var linkedVertices;
+    
+    var nodesIndexes;
+    
+    function initGraph(nodes, edges) {
+        var graph = [];
+        if (nodes.length == 0) {
+            return graph;
+        }
         graph.resizeMatrix(nodes.length, nodes.length, 0);
         for (var i = 0; i < edges.length; ++i) {
-            graph[edges[i].fromNodeIndex][edges[i].toNodeIndex] += edges[i].edgeValue;
-            graph[edges[i].toNodeIndex][edges[i].fromNodeIndex] += edges[i].edgeValue;
+            if (edges[i].part != graphPartsIndexes[nodes[0]]) {
+                continue;
+            }
+            graph[nodesIndexes[edges[i].fromNodeIndex]][nodesIndexes[edges[i].toNodeIndex]] += edges[i].edgeValue;
+            graph[nodesIndexes[edges[i].toNodeIndex]][nodesIndexes[edges[i].fromNodeIndex]] += edges[i].edgeValue;
         }
-        bestCost = Number.MAX_SAFE_INTEGER;
-        bestCut = [];
+        return graph;
     }
 
 
-    function mincut() {
+    function mincut(nodes, graph) {
         var vertices = [];
         var used = [];
         var verticesCount = nodes.length;
+        
+        bestCost = Number.MAX_SAFE_INTEGER;
+        bestCut = [];
         
         vertices.resizeMatrix(verticesCount, 0, 0);
         for (var i = 0; i < verticesCount; ++i) {
@@ -77,21 +90,79 @@ museum.algorithms.global_min_cut = (function() {
             }
         }
     }
+    
+    function setLinkedEdges() {
+        linkedVertices = [];
+        linkedVertices.resizeMatrix(allNodes.length, 0, 0);
+        for (var i = 0; i < allEdges.length; ++i) {
+            linkedVertices[allEdges[i].fromNodeIndex].push(allEdges[i].toNodeIndex);
+            linkedVertices[allEdges[i].toNodeIndex].push(allEdges[i].fromNodeIndex);
+        }
+    }
+    
+    function isFree(vertex) {
+        return graphPartsIndexes[vertex] == -1;
+    }
+    
+    
+    var vertexIndex;
+    function dfs(vertex, partIndex) {
+        if (!isFree(vertex)) {
+            return;
+        }
+        nodesIndexes[vertex] = vertexIndex++;
+        graphParts[partIndex].push(vertex);
+        graphPartsIndexes[vertex] = partIndex;
+        for (var i = 0; i < linkedVertices[vertex].length; ++i) {
+            dfs(linkedVertices[vertex][i], partIndex);
+        }
+    }
 
-    function getMincutPartNodes() {
-        initGraph();
-        mincut();
-        console.log(bestCost);
-        return bestCut;
+    function getEdgesToRemove() {
+        setLinkedEdges();
+        graphPartsIndexes = []
+        graphPartsIndexes.resize(allNodes.length, -1);
+        nodesIndexes = [];
+        nodesIndexes.resize(allNodes.length, -1);
+        graphParts = [];
+        var partIndex = 0;
+        for (var i = 0; i < allNodes.length; ++i) {
+            if (isFree(i)) {
+                vertexIndex = 0;
+                graphParts.push([]);
+                dfs(i, partIndex);
+                ++partIndex;
+            }
+        }
+        for (var i = 0; i < allEdges.length; ++i) {
+            allEdges[i].part = graphPartsIndexes[allEdges[i].fromNodeIndex];
+        }
+        var edgesToRemove = [];
+        for (var i = 0; i < partIndex; ++i) {
+            var graph = initGraph(graphParts[i], allEdges);
+            mincut(graphParts[i], graph);
+            bestCut = museum.algorithms.quick_sort.quickSort(bestCut);
+            for (var j = 0; j < allEdges.length; ++j) {
+                if (allEdges[j].part != i) {
+                    continue;
+                }
+                var indexFrom = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdges[j].fromNodeIndex]);
+                var indexTo = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdges[j].toNodeIndex]);
+                if (indexFrom == -1 && indexTo != -1 || indexFrom != -1 && indexTo == -1) {
+                    edgesToRemove.push(allEdges[j].id);
+                }
+            }
+        }
+        return edgesToRemove;
     }
 
     function setData(nodesData, edgesData) {
-        nodes = nodesData;
-        edges = edgesData;
+        allNodes = nodesData;
+        allEdges = edgesData;
     }
 
     return {
         setData: setData,
-        getMincutPartNodes: getMincutPartNodes
+        getEdgesToRemove: getEdgesToRemove
     };
 })();

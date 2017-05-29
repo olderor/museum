@@ -260,14 +260,9 @@ museum.network = (function() {
         var allNodes = setDataToArray(nodes);
         var allEdges = setDataToArray(edges);
         museum.algorithms.global_min_cut.setData(allNodes, allEdges);
-        var part = museum.algorithms.global_min_cut.getMincutPartNodes();
-        part = museum.algorithms.quick_sort.quickSort(part);
-        for (var i = 0; i < allEdges.length; ++i) {
-            var indexFrom = museum.algorithms.search.binarySearch(part, allEdges[i].fromNodeIndex);
-            var indexTo = museum.algorithms.search.binarySearch(part, allEdges[i].toNodeIndex);
-            if (indexFrom == -1 && indexTo != -1 || indexFrom != -1 && indexTo == -1) {
-                edges.remove(allEdges[i].id);
-            }
+        var edgesToRemove = museum.algorithms.global_min_cut.getEdgesToRemove();
+        for (var i = 0; i < edgesToRemove.length; ++i) {
+            edges.remove(edgesToRemove[i]);
         }
     }
     
