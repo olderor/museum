@@ -21,7 +21,7 @@ museum.playlists = (function() {
 
     function init() {
         $('#add-playlist-button').click(function() {
-            var url = $('#spotify-text-input').val();
+            var url = $('#spotify-text-input').val().trim();
             $('#spotify-text-input').val('');
             addPlaylistUrl(url);
         });
