@@ -7,10 +7,10 @@ username: museum-test password: 12345678<br /><br />
 You can create your own playlist in your account in spotify and then pass it to the app.<br />
 Also, you can find interesting for you playlists in the spotify ([for examle, browse here](https://open.spotify.com/browse/featured)) and then copy paste its link to the app.<br />
 Example:<br />
-* https://open.spotify.com/user/museum-test/playlist/66bEDZ7YvY4Q9hrnGB7tGD pink-floyd fan
-* https://open.spotify.com/user/museum-test/playlist/1VPXpDfeaqcKxX1IvZidUH 🤑💰🤑💰🤑
-* https://open.spotify.com/user/museum-test/playlist/3G9GTSdFQMP0qep2Z1xOot classic
-* https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWXRqgorJj26U     rock classic
+* pink-floyd fan https://open.spotify.com/user/museum-test/playlist/66bEDZ7YvY4Q9hrnGB7tGD
+* 🤑💰🤑💰🤑 https://open.spotify.com/user/museum-test/playlist/1VPXpDfeaqcKxX1IvZidUH
+* classic https://open.spotify.com/user/museum-test/playlist/3G9GTSdFQMP0qep2Z1xOot
+* rock classic https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWXRqgorJj26U
 <br />
 Example:<br />
 * https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W
