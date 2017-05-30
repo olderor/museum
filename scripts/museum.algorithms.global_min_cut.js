@@ -346,7 +346,12 @@ museum.algorithms.global_min_cut = (function() {
     }
 
     function getEdgesToRemove() {
-        $('#description').removeClass('hidden');
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').removeClass('hidden');
+            },
+            delay: 0
+        });
         setLinkedEdges();
         graphPartsIndexes = []
         graphPartsIndexes.resize(allNodes.length, -1);

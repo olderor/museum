@@ -336,6 +336,12 @@ museum.network = (function() {
                 });
             })(i);
         }
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').addClass('hidden');
+            },
+            delay: 0
+        });
 
         museum.animation_manager.processAnimation();
     }
