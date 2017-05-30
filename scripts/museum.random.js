@@ -22,11 +22,16 @@ museum.random = (function() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
     }
+    
+    function getRandomColorRgba() {
+        return 'rgba(' + getRandomInt(0, 256) + ', ' + getRandomInt(0, 256) + ", " + getRandomInt(0, 256) + ', 1)';
+    }
 
     return {
         getRandom: getRandom,
         getRandomArbitrary: getRandomArbitrary,
         getRandomInt: getRandomInt,
-        guid: guid
+        guid: guid,
+        getRandomColorRgba: getRandomColorRgba
     };
 })();

@@ -82,13 +82,8 @@ museum.algorithms.global_min_cut = (function() {
                             block: function() {
                                 allNodes.update([{
                                     id: node,
-                                    borderWidth: 20
-                                }]);
-                                allNodes.update([{
-                                    id: node,
-                                    color: {
-                                        border: "yellow"
-                                    }
+                                    borderWidth: 20,
+                                    color: "yellow"
                                 }]);
                             },
                             delay: 500
@@ -101,13 +96,11 @@ museum.algorithms.global_min_cut = (function() {
                             (function(prev) {
                                 museum.animation_manager.addAnimation({
                                     block: function() {
+                                        let settings = museum.network.getGroupSettingsById(prev);
                                         allNodes.update([{
                                             id: prev,
-                                            borderWidth: undefined
-                                        }]);
-                                        allNodes.update([{
-                                            id: prev,
-                                            color: undefined
+                                            borderWidth: settings.borderWidth,
+                                            color: settings.color
                                         }]);
                                     },
                                     delay: 500
@@ -120,13 +113,8 @@ museum.algorithms.global_min_cut = (function() {
                                 block: function() {
                                     allNodes.update([{
                                         id: node,
-                                        borderWidth: 10
-                                    }]);
-                                    allNodes.update([{
-                                        id: node,
-                                        color: {
-                                            border: "red"
-                                        }
+                                        borderWidth: 10,
+                                        color: "red"
                                     }]);
                                 },
                                 delay: 500
@@ -137,15 +125,11 @@ museum.algorithms.global_min_cut = (function() {
                         (function(node) {
                             museum.animation_manager.addAnimation({
                                 block: function() {
+                                    let settings = museum.network.getGroupSettingsById(node);
                                     allNodes.update([{
                                         id: node,
-                                        borderWidth: undefined
-                                    }]);
-                                    allNodes.update([{
-                                        id: node,
-                                        color: {
-                                            border: undefined
-                                        }
+                                        borderWidth: settings.borderWidth,
+                                        color: settings.color
                                     }]);
                                 },
                                 delay: 500
@@ -159,15 +143,11 @@ museum.algorithms.global_min_cut = (function() {
                 (function(node) {
                     museum.animation_manager.addAnimation({
                         block: function() {
+                            let settings = museum.network.getGroupSettingsById(node);
                             allNodes.update([{
                                 id: node,
-                                borderWidth: undefined
-                            }]);
-                            allNodes.update([{
-                                id: node,
-                                color: {
-                                    border: undefined
-                                }
+                                borderWidth: settings.borderWidth,
+                                color: settings.color
                             }]);
                         },
                         delay: 500

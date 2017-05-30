@@ -13,6 +13,27 @@ museum.network = (function() {
     var verticesWithoutEdges = [];
 
     var shouldShowVerticesWithoutEdges = false;
+    
+    var groupsSettings = {};
+    var groupsByIds = {};
+    
+    function getGroupSettings(group) {
+        return groupsSettings[group];
+    }   
+    
+    function getGroupSettingsById(id) {
+        return groupsSettings[groupsByIds[id]];
+    }
+    
+    
+    function addGroupSettingsIfNeeded(group, id) {
+        groupsByIds[id] = group;
+        if (getGroupSettings(group)) {
+            return;
+        }
+        var color = museum.random.getRandomColorRgba();
+        groupsSettings[group] = { color: color, borderWidth: 10 };
+    }
 
     function getOptions() {
         return {
@@ -22,8 +43,7 @@ museum.network = (function() {
                 font: {
                     size: 32,
                     color: '#ffffff'
-                },
-                borderWidth: 5
+                }
             },
             edges: {
                 width: 2
@@ -34,7 +54,8 @@ museum.network = (function() {
             },
             layout: {
                 improvedLayout: false
-            }
+            },
+            groups: groupsSettings
         };
     }
 
@@ -55,7 +76,8 @@ museum.network = (function() {
             },
             layout: {
                 improvedLayout: false
-            }
+            },
+            groups: groupsSettings
         };
     }
 
@@ -81,7 +103,7 @@ museum.network = (function() {
 
         nodes = new vis.DataSet();
         edges = new vis.DataSet();
-
+        groupsSettings = {};
         for (var i = 0; i < nodesCount; ++i) {
             nodes.add({
                 id: i,
@@ -99,6 +121,7 @@ museum.network = (function() {
 
     function setTracksNodes() {
         nodes = new vis.DataSet();
+        groupsSettings = {};
         var level = 0;
         for (var guid in playlists) {
             ++level;
@@ -120,9 +143,10 @@ museum.network = (function() {
                 if (image && image["url"]) {
                     imageUrl = image["url"];
                 }
-
+                let id = museum.random.guid();
+                addGroupSettingsIfNeeded(guid, id);
                 nodes.add({
-                    id: museum.random.guid(),
+                    id: id,
                     title: artistLabel + " - " + track["name"],
                     image: imageUrl,
                     group: guid,
@@ -161,7 +185,8 @@ museum.network = (function() {
 
 
     function setPlaylistsNodes() {
-        nodes = new vis.DataSet();;
+        nodes = new vis.DataSet();
+        groupsSettings = {};
         for (var guid in playlists) {
             var playlist = playlists[guid];
             if (!playlist) {
@@ -174,6 +199,7 @@ museum.network = (function() {
                 imageUrl = image["url"];
             }
 
+            addGroupSettingsIfNeeded(playlist["id"], guid);
             nodes.add({
                 id: guid,
                 title: playlist["name"] + " by " + playlist["owner"]["id"],
@@ -256,7 +282,6 @@ museum.network = (function() {
             type = museum.graphmanager.types.tracksGeneral;
         }
         var container = document.getElementById('mynetwork');
-        var options = getOptions();
         switch (type) {
             case museum.graphmanager.types.tracksGeneral:
                 setTracksNodes();
@@ -281,6 +306,7 @@ museum.network = (function() {
                 addLegend("id");
                 break;
         }
+        var options = getOptions();
         var data = {
             nodes: nodes,
             edges: edges
@@ -393,6 +419,8 @@ museum.network = (function() {
         draw: draw,
         stabilize: stabilize,
         split: split,
-        filterVertices: filterVertices
+        filterVertices: filterVertices,
+        getGroupSettings: getGroupSettings,
+        getGroupSettingsById: getGroupSettingsById
     };
 })();
