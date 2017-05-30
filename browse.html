@@ -35,6 +35,7 @@
     <script src="scripts/museum.algorithms.search.js"></script>
     <script src="scripts/museum.algorithms.quicksort.js"></script>
     <script src="scripts/museum.algorithms.global_min_cut.js"></script>
+    <script src="scripts/museum.animation_manager.js"></script>
 </head>
 
 <body onload="init()">
@@ -88,6 +89,9 @@
         <div class="side-nav fixed right-aligned custom-scrollbar ps-container d-flex">
         <div class="align-self-center" style="width: 100%;">
         <ul>
+            <li class="nav-item d-flex justify-content-center hidden" id="description">
+                Blablabla
+            </li>
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">
               <div class="switch vertices-switch-container">
                 <div>Show vertices without edges</div>
@@ -103,6 +107,7 @@
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.split();">Split</button>
             </li>
+            <li class="nav-item"></li>
             <li>
                 <div class="label-network-label">Graph labels</div>
                 <div id="label-network"></div>

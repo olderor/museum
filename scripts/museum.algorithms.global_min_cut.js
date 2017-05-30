@@ -4,18 +4,20 @@ museum.algorithms.global_min_cut = museum.algorithms.global_min_cut || {};
 museum.algorithms.global_min_cut = (function() {
 
     var allNodes;
-    var allEdges;
+
+    var allNodesData;
+    var allEdgesData;
 
     var bestCost;
     var bestCut;
-    
+
     var graphPartsIndexes;
     var graphParts;
-    
+
     var linkedVertices;
-    
+
     var nodesIndexes;
-    
+
     function initGraph(nodes, edges) {
         var graph = [];
         if (nodes.length == 0) {
@@ -32,15 +34,14 @@ museum.algorithms.global_min_cut = (function() {
         return graph;
     }
 
-
     function mincut(nodes, graph) {
         var vertices = [];
         var used = [];
         var verticesCount = nodes.length;
-        
+
         bestCost = Number.MAX_SAFE_INTEGER;
         bestCut = [];
-        
+
         vertices.resizeMatrix(verticesCount, 0, 0);
         for (var i = 0; i < verticesCount; ++i) {
             vertices[i].push(i);
@@ -49,19 +50,129 @@ museum.algorithms.global_min_cut = (function() {
         for (var phase = 1; phase < verticesCount; ++phase) {
             var inSet = [];
             var setValues = [];
+            museum.animation_manager.addAnimation({
+                block: function() {
+                    $('#description').text('Initializing data...');
+                },
+                delay: 1
+            });
             for (var i = 0; i < verticesCount; ++i) {
                 inSet.push(false);
                 setValues.push(0);
+                var node = allNodesData[nodes[i]].id;
+                (function(node) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            allNodes.update([{
+                                id: node,
+                                label: "0"
+                            }]);
+                        },
+                        delay: 0
+                    });
+                })(node);
             }
             var previous;
             for (var phaseI = 0; phaseI <= verticesCount - phase; ++phaseI) {
                 var newVertex = -1;
                 for (var i = 0; i < verticesCount; ++i) {
+                    var node = allNodesData[nodes[i]].id;
+                    (function(node) {
+                        museum.animation_manager.addAnimation({
+                            block: function() {
+                                allNodes.update([{
+                                    id: node,
+                                    borderWidth: 20
+                                }]);
+                                allNodes.update([{
+                                    id: node,
+                                    color: {
+                                        border: "yellow"
+                                    }
+                                }]);
+                            },
+                            delay: 500
+                        });
+                    })(node);
                     if (!used[i] && !inSet[i] &&
                         (newVertex == -1 || setValues[i] > setValues[newVertex])) {
+                        if (newVertex != -1) {
+                            var prev = allNodesData[nodes[newVertex]].id;
+                            (function(prev) {
+                                museum.animation_manager.addAnimation({
+                                    block: function() {
+                                        allNodes.update([{
+                                            id: prev,
+                                            borderWidth: undefined
+                                        }]);
+                                        allNodes.update([{
+                                            id: prev,
+                                            color: undefined
+                                        }]);
+                                    },
+                                    delay: 500
+                                });
+                            })(prev);
+                        }
                         newVertex = i;
+                        (function(node) {
+                            museum.animation_manager.addAnimation({
+                                block: function() {
+                                    allNodes.update([{
+                                        id: node,
+                                        borderWidth: 10
+                                    }]);
+                                    allNodes.update([{
+                                        id: node,
+                                        color: {
+                                            border: "red"
+                                        }
+                                    }]);
+                                },
+                                delay: 500
+                            });
+                        })(node);
+                    }
+                    else {
+                        (function(node) {
+                            museum.animation_manager.addAnimation({
+                                block: function() {
+                                    allNodes.update([{
+                                        id: node,
+                                        borderWidth: undefined
+                                    }]);
+                                    allNodes.update([{
+                                        id: node,
+                                        color: {
+                                            border: undefined
+                                        }
+                                    }]);
+                                },
+                                delay: 500
+                            });
+                        })(node);
                     }
                 }
+
+
+                var node = allNodesData[nodes[newVertex]].id;
+                (function(node) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            allNodes.update([{
+                                id: node,
+                                borderWidth: undefined
+                            }]);
+                            allNodes.update([{
+                                id: node,
+                                color: {
+                                    border: undefined
+                                }
+                            }]);
+                        },
+                        delay: 500
+                    });
+                })(node);
 
                 if (phaseI != verticesCount - phase) {
                     inSet[newVertex] = true;
@@ -90,22 +201,23 @@ museum.algorithms.global_min_cut = (function() {
             }
         }
     }
-    
+
     function setLinkedEdges() {
         linkedVertices = [];
         linkedVertices.resizeMatrix(allNodes.length, 0, 0);
-        for (var i = 0; i < allEdges.length; ++i) {
-            linkedVertices[allEdges[i].fromNodeIndex].push(allEdges[i].toNodeIndex);
-            linkedVertices[allEdges[i].toNodeIndex].push(allEdges[i].fromNodeIndex);
+        for (var i = 0; i < allEdgesData.length; ++i) {
+            linkedVertices[allEdgesData[i].fromNodeIndex].push(allEdgesData[i].toNodeIndex);
+            linkedVertices[allEdgesData[i].toNodeIndex].push(allEdgesData[i].fromNodeIndex);
         }
     }
-    
+
     function isFree(vertex) {
         return graphPartsIndexes[vertex] == -1;
     }
-    
-    
+
+
     var vertexIndex;
+
     function dfs(vertex, partIndex) {
         if (!isFree(vertex)) {
             return;
@@ -119,6 +231,7 @@ museum.algorithms.global_min_cut = (function() {
     }
 
     function getEdgesToRemove() {
+        $('#description').removeClass('hidden');
         setLinkedEdges();
         graphPartsIndexes = []
         graphPartsIndexes.resize(allNodes.length, -1);
@@ -134,31 +247,33 @@ museum.algorithms.global_min_cut = (function() {
                 ++partIndex;
             }
         }
-        for (var i = 0; i < allEdges.length; ++i) {
-            allEdges[i].part = graphPartsIndexes[allEdges[i].fromNodeIndex];
+        for (var i = 0; i < allEdgesData.length; ++i) {
+            allEdgesData[i].part = graphPartsIndexes[allEdgesData[i].fromNodeIndex];
         }
         var edgesToRemove = [];
         for (var i = 0; i < partIndex; ++i) {
-            var graph = initGraph(graphParts[i], allEdges);
+            var graph = initGraph(graphParts[i], allEdgesData);
             mincut(graphParts[i], graph);
             bestCut = museum.algorithms.quick_sort.quickSort(bestCut);
-            for (var j = 0; j < allEdges.length; ++j) {
-                if (allEdges[j].part != i) {
+            for (var j = 0; j < allEdgesData.length; ++j) {
+                if (allEdgesData[j].part != i) {
                     continue;
                 }
-                var indexFrom = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdges[j].fromNodeIndex]);
-                var indexTo = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdges[j].toNodeIndex]);
+                var indexFrom = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdgesData[j].fromNodeIndex]);
+                var indexTo = museum.algorithms.search.binarySearch(bestCut, nodesIndexes[allEdgesData[j].toNodeIndex]);
                 if (indexFrom == -1 && indexTo != -1 || indexFrom != -1 && indexTo == -1) {
-                    edgesToRemove.push(allEdges[j].id);
+                    edgesToRemove.push(allEdgesData[j].id);
                 }
             }
         }
+
         return edgesToRemove;
     }
 
-    function setData(nodesData, edgesData) {
-        allNodes = nodesData;
-        allEdges = edgesData;
+    function setData(nodes, nodesData, edgesData) {
+        allNodes = nodes;
+        allNodesData = nodesData;
+        allEdgesData = edgesData;
     }
 
     return {

@@ -13,7 +13,7 @@ museum.network = (function() {
     var verticesWithoutEdges = [];
 
     var shouldShowVerticesWithoutEdges = false;
-    
+
     function getOptions() {
         return {
             nodes: {
@@ -296,13 +296,23 @@ museum.network = (function() {
 
 
     function split() {
-        var allNodes = setDataToArray(nodes);
-        var allEdges = setDataToArray(edges);
-        museum.algorithms.global_min_cut.setData(allNodes, allEdges);
+        var allNodes = nodes;
+        var allNodesData = setDataToArray(allNodes);
+        var allEdgesData = setDataToArray(edges);
+        museum.algorithms.global_min_cut.setData(allNodes, allNodesData, allEdgesData);
         var edgesToRemove = museum.algorithms.global_min_cut.getEdgesToRemove();
         for (var i = 0; i < edgesToRemove.length; ++i) {
-            edges.remove(edgesToRemove[i]);
+            (function(i) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        edges.remove(edgesToRemove[i]);
+                    },
+                    delay: 0
+                });
+            })(i);
         }
+
+        museum.animation_manager.processAnimation();
     }
 
     function removeVerticesWithoutEdges() {
@@ -372,7 +382,9 @@ museum.network = (function() {
             });
             y += step;
         }
-        network = new vis.Network(mynetwork, { nodes: labelNodes}, getLabelOptions());
+        network = new vis.Network(mynetwork, {
+            nodes: labelNodes
+        }, getLabelOptions());
     }
 
     return {
