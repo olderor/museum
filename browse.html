@@ -93,9 +93,9 @@
                 Blablabla
             </li>
             <li class="nav-item d-flex justify-content-center" id="general-graph-item">
-              <div class="switch vertices-switch-container">
+              <div class="switch switch-container">
                 <div>Show vertices without edges</div>
-                <label class="vertices-switch d-flex justify-content-center">
+                <label class="switch-label d-flex justify-content-center">
                   <input type="checkbox" onclick="museum.network.filterVertices(this.checked);">
                   <span class="lever"></span>
                 </label>
@@ -109,8 +109,23 @@
             </li>
             <li class="nav-item"></li>
             <li>
-                <div class="label-network-label">Graph labels</div>
+                <div class="label">Graph labels</div>
                 <div id="label-network"></div>
+            </li>
+            <li class="nav-item animation-speed-range-container">
+                <div class="label">
+                    Animation speed
+                </div>
+                <input type="range" min="0.01" max="10" step="0.01" value="1" id="animation-speed" />
+            </li>
+            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+              <div class="switch switch-container">
+                <div>Skip animation</div>
+                <label class="switch-label d-flex justify-content-center">
+                  <input type="checkbox" checked id="skip-animation-checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
             </li>
             <li class="nav-item"></li>
         </ul>

@@ -137,11 +137,11 @@ canvas, .vis-network {
     height: 350px;
 }
 
-.vertices-switch-container {
-    padding: 20px 10px;
+.switch-container {
+    padding: 10px;
 }
 
-.vertices-switch {
+.switch-label {
     padding-top: 10px;
 }
 
@@ -149,7 +149,7 @@ canvas, .vis-network {
     border: 4px solid #FF8400;
 }
 
-.label-network-label {
+.label {
     text-align: center;
     padding-top: 20px;
     padding-bottom: 5px;
@@ -157,4 +157,12 @@ canvas, .vis-network {
 
 .hidden {
     display: none !important;
+}
+
+#description {
+    padding: 10px;
+}
+
+.animation-speed-range-container {
+    padding: 0 20px;
 }

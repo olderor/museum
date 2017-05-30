@@ -11278,7 +11278,7 @@ a.text-gray-dark:hover {
 .primary-color,
 .stepper li.active a .circle,
 .stepper li.completed a .circle {
-    background-color: #4285F4!important
+    background-color: #FF8400!important
 }
 
 .primary-color-dark {
@@ -11817,7 +11817,7 @@ img {
 }
 
 .pagination.pg-blue .active .page-link {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .pagination.pg-red .active .page-link {
@@ -11854,12 +11854,12 @@ img {
 }
 
 .pager.pg-blue li a {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .pager.pg-blue li a:focus,
 .pager.pg-blue li a:hover {
-    background-color: #4285F4;
+    background-color: #FF8400;
     color: #fff
 }
 
@@ -15912,7 +15912,7 @@ footer.page-footer .title {
 
 .divider-short {
     max-width: 50px;
-    border-color: #4285F4;
+    border-color: #FF8400;
     border-width: 3px
 }
 
@@ -15932,11 +15932,11 @@ footer.page-footer .title {
 }
 
 .bq-primary {
-    border-left: 3px solid #4285F4
+    border-left: 3px solid #FF8400
 }
 
 .bq-primary .bq-title {
-    color: #4285F4
+    color: #FF8400
 }
 
 .bq-warning {
@@ -16209,7 +16209,7 @@ button:focus {
 }
 
 .btn-primary {
-    background: #4285F4
+    background: #FF8400
 }
 
 .btn-primary:active,
@@ -16300,7 +16300,7 @@ button:focus {
 }
 
 .btn-outline-primary {
-    border: 2px solid #4285F4;
+    border: 2px solid #FF8400;
     color: #0d47a1!important;
     background-color: transparent
 }
@@ -16309,8 +16309,8 @@ button:focus {
 .btn-outline-primary:active:focus,
 .btn-outline-primary:focus,
 .btn-outline-primary:hover {
-    color: #4285F4;
-    border-color: #4285F4;
+    color: #FF8400;
+    border-color: #FF8400;
     background-color: transparent
 }
 
@@ -16770,9 +16770,9 @@ input[type=text]:focus:not([readonly]),
 input[type=time]:focus:not([readonly]),
 input[type=url]:focus:not([readonly]),
 textarea.md-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid #4285F4;
-    -webkit-box-shadow: 0 1px 0 0 #4285F4;
-    box-shadow: 0 1px 0 0 #4285F4
+    border-bottom: 1px solid #FF8400;
+    -webkit-box-shadow: 0 1px 0 0 #FF8400;
+    box-shadow: 0 1px 0 0 #FF8400
 }
 
 input[type=date]:focus:not([readonly])+label,
@@ -16787,7 +16787,7 @@ input[type=text]:focus:not([readonly])+label,
 input[type=time]:focus:not([readonly])+label,
 input[type=url]:focus:not([readonly])+label,
 textarea.md-textarea:focus:not([readonly])+label {
-    color: #4285F4
+    color: #FF8400
 }
 
 input[type=date].valid,
@@ -17061,7 +17061,7 @@ label {
 }
 
 .md-form .prefix.active {
-    color: #4285F4
+    color: #FF8400
 }
 
 .md-form .prefix~input,
@@ -17238,7 +17238,7 @@ textarea.md-textarea {
 }
 
 i.btn-primary {
-    background: #4285F4!important
+    background: #FF8400!important
 }
 
 i.btn-default {
@@ -18568,8 +18568,8 @@ body.scrollable {
 
 [type=radio]:checked+label:after {
     border-radius: 50%;
-    border: 2px solid #4285F4;
-    background-color: #4285F4;
+    border: 2px solid #FF8400;
+    background-color: #FF8400;
     z-index: 0;
     -webkit-transform: scale(1.02);
     -ms-transform: scale(1.02);
@@ -18578,13 +18578,13 @@ body.scrollable {
 
 [type=radio].with-gap:checked+label:before {
     border-radius: 50%;
-    border: 2px solid #4285F4
+    border: 2px solid #FF8400
 }
 
 [type=radio].with-gap:checked+label:after {
     border-radius: 50%;
-    border: 2px solid #4285F4;
-    background-color: #4285F4;
+    border: 2px solid #FF8400;
+    background-color: #FF8400;
     z-index: 0;
     -webkit-transform: scale(.5);
     -ms-transform: scale(.5);
@@ -18658,8 +18658,8 @@ body.scrollable {
     height: 22px;
     border-top: 2px solid transparent;
     border-left: 2px solid transparent;
-    border-right: 2px solid #4285F4;
-    border-bottom: 2px solid #4285F4;
+    border-right: 2px solid #FF8400;
+    border-bottom: 2px solid #FF8400;
     -webkit-transform: rotate(40deg);
     -ms-transform: rotate(40deg);
     transform: rotate(40deg);
@@ -18681,7 +18681,7 @@ body.scrollable {
     height: 22px;
     border-top: none;
     border-left: none;
-    border-right: 2px solid #4285F4;
+    border-right: 2px solid #FF8400;
     border-bottom: none;
     -webkit-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -19115,7 +19115,7 @@ input[type=range]+.thumb {
     height: 0;
     width: 0;
     border-radius: 50%;
-    background-color: #4285F4;
+    background-color: #FF8400;
     top: 10px;
     margin-left: -6px;
     -webkit-transform-origin: 50% 50%;
@@ -19130,7 +19130,7 @@ input[type=range]+.thumb .value {
     display: block;
     width: 30px;
     text-align: center;
-    color: #4285F4;
+    color: #FF8400;
     font-size: 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -19164,7 +19164,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 14px;
     width: 14px;
     border-radius: 50%;
-    background-color: #4285F4;
+    background-color: #FF8400;
     -webkit-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
     margin: -5px 0 0;
@@ -19191,7 +19191,7 @@ input[type=range]::-moz-range-thumb {
     height: 14px;
     width: 14px;
     border-radius: 50%;
-    background: #4285F4;
+    background: #FF8400;
     margin-top: -5px
 }
 
@@ -19225,7 +19225,7 @@ input[type=range]::-ms-thumb {
     height: 14px;
     width: 14px;
     border-radius: 50%;
-    background: #4285F4
+    background: #FF8400
 }
 
 input[type=range]:focus::-ms-fill-lower {
@@ -19381,7 +19381,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .md-pills.pills-primary .nav-item .nav-link.active {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .md-pills.pills-danger .nav-item .nav-link.active {
@@ -19537,7 +19537,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .classic-tabs.tabs-primary {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .classic-tabs.tabs-primary li a.active {
@@ -19830,7 +19830,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 .spinner-blue,
 .spinner-blue-only {
-    border-color: #4285f4
+    border-color: #FF8400
 }
 
 .spinner-red,
@@ -20343,7 +20343,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 .nav-pills.md-pills .nav-item .active {
     border: none;
-    background-color: #4285F4;
+    background-color: #FF8400;
     color: #fff
 }
 
@@ -21224,7 +21224,7 @@ input[type=range]:focus::-ms-fill-upper {
 .dropdown-content li>a,
 .dropdown-content li>span {
     font-size: 1.2rem;
-    color: #4285F4;
+    color: #FF8400;
     display: block;
     padding: 1rem
 }
@@ -21263,7 +21263,7 @@ input[type=range]:focus::-ms-fill-upper {
 .dropdown-primary .dropdown-content li a:hover,
 .dropdown-primary .dropdown-content li span:hover,
 .dropdown-primary .dropdown-content li.active {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .dropdown-danger .dropdown-content li a:hover,
@@ -21320,7 +21320,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 .dropdown .dropdown-menu.dropdown-primary .dropdown-item:active,
 .dropdown .dropdown-menu.dropdown-primary .dropdown-item:hover {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .dropdown .dropdown-menu.dropdown-danger .dropdown-item:active,
@@ -21374,7 +21374,7 @@ input[type=range]:focus::-ms-fill-upper {
     color: #fff!important;
     -webkit-transition: all .1s linear;
     transition: all .1s linear;
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .dropdown-menu.animated {
@@ -22841,14 +22841,14 @@ a.pswp__share--download:hover {
 .carousel-multi-item .carousel-indicators li {
     height: 20px;
     max-width: 20px;
-    background-color: #4285F4;
+    background-color: #FF8400;
     margin-bottom: -60px
 }
 
 .carousel-multi-item .carousel-indicators .active {
     height: 25px;
     max-width: 25px;
-    background-color: #4285F4;
+    background-color: #FF8400;
     border-radius: 50%
 }
 
@@ -22857,7 +22857,7 @@ a.pswp__share--download:hover {
 }
 
 .carousel-multi-item .controls-top .btn-floating {
-    background: #4285F4
+    background: #FF8400
 }
 
 .carousel-multi-item .carousel-indicators {
@@ -23534,7 +23534,7 @@ button.toast-close-button {
 
 .product-card .action-buttons .btn-floating {
     display: block;
-    background-color: #4285F4;
+    background-color: #FF8400;
     height: 37px;
     width: 37px;
     line-height: 0
@@ -23682,7 +23682,7 @@ button.toast-close-button {
 }
 
 .cart-modal .table .fa-remove {
-    color: #4285F4
+    color: #FF8400
 }
 
 .sn-bg-1 {
@@ -25018,7 +25018,7 @@ button.toast-close-button {
 .white-skin .primary-color,
 .white-skin .stepper li.active a .circle,
 .white-skin .stepper li.completed a .circle {
-    background-color: #4285F4!important
+    background-color: #FF8400!important
 }
 
 .white-skin .navbar {
@@ -25086,7 +25086,7 @@ button.toast-close-button {
 }
 
 .white-skin .side-nav .social a:hover .fa {
-    color: #4285F4;
+    color: #FF8400;
     -webkit-transition: all .3s linear;
     transition: all .3s linear
 }
@@ -25137,11 +25137,11 @@ button.toast-close-button {
 
 .white-skin .side-nav .collapsible li a.active {
     font-weight: 500;
-    color: #4285F4
+    color: #FF8400
 }
 
 .white-skin .side-nav .collapsible li a.active .fa {
-    color: #4285F4;
+    color: #FF8400;
     -webkit-transition: color .3s linear;
     transition: color .3s linear
 }
@@ -25158,7 +25158,7 @@ button.toast-close-button {
 .white-skin input[type=text]:focus:not([readonly])+label,
 .white-skin input[type=password]:focus:not([readonly])+label,
 .white-skin textarea.md-textarea:focus:not([readonly])+label {
-    color: #4285F4
+    color: #FF8400
 }
 
 .white-skin .side-nav .sidenav-bg.mask-strong:after,
@@ -25179,7 +25179,7 @@ button.toast-close-button {
 }
 
 .white-skin .btn-primary {
-    background: #4285F4
+    background: #FF8400
 }
 
 .white-skin .btn-primary:focus,
@@ -25225,14 +25225,14 @@ button.toast-close-button {
 .white-skin input[type=text]:focus:not([readonly]),
 .white-skin input[type=password]:focus:not([readonly]),
 .white-skin textarea.md-textarea:focus:not([readonly]) {
-    border-color: #4285F4;
-    -webkit-box-shadow: 0 1px 0 0 #4285F4;
-    box-shadow: 0 1px 0 0 #4285F4
+    border-color: #FF8400;
+    -webkit-box-shadow: 0 1px 0 0 #FF8400;
+    box-shadow: 0 1px 0 0 #FF8400
 }
 
 .white-skin input[type=checkbox]:checked+label:before {
-    border-right: 2px solid #4285F4;
-    border-bottom: 2px solid #4285F4
+    border-right: 2px solid #FF8400;
+    border-bottom: 2px solid #FF8400
 }
 
 .white-skin input[type=checkbox].filled-in:checked+label:before {
@@ -25241,8 +25241,8 @@ button.toast-close-button {
 }
 
 .white-skin input[type=checkbox].filled-in:checked+label:after {
-    background-color: #4285F4;
-    border-color: #4285F4
+    background-color: #FF8400;
+    border-color: #FF8400
 }
 
 .white-skin .top-nav-collapse {
@@ -25252,7 +25252,7 @@ button.toast-close-button {
 .white-skin .carousel-multi-item .carousel-indicators li,
 .white-skin .carousel-multi-item .carousel-indicators li.active,
 .white-skin .carousel-multi-item .controls-top>a {
-    background-color: #4285F4
+    background-color: #FF8400
 }
 
 .white-skin .card-header,
@@ -25263,19 +25263,19 @@ button.toast-close-button {
 .white-skin .spinner-primary,
 .white-skin .spinner-primary-color,
 .white-skin .spinner-primary-color-only {
-    border-color: #4285F4
+    border-color: #FF8400
 }
 
 .white-skin .pagination-primary-color .page-item.active .page-link,
 .white-skin .pagination-primary-color .page-item.active .page-link:focus,
 .white-skin .pagination-primary-color .page-item.active .page-link:hover {
     color: #fff;
-    background-color: #4285F4;
-    border-color: #4285F4
+    background-color: #FF8400;
+    border-color: #FF8400
 }
 
 .white-skin .pagination-primary-color .page-link {
-    color: #4285F4
+    color: #FF8400
 }
 
 .black-skin .gradient {
@@ -25690,9 +25690,9 @@ button.toast-close-button {
 }
 
 .chips.focus {
-    border-bottom: 1px solid #4285F4;
-    -webkit-box-shadow: 0 1px 0 0 #4285F4;
-    box-shadow: 0 1px 0 0 #4285F4
+    border-bottom: 1px solid #FF8400;
+    -webkit-box-shadow: 0 1px 0 0 #FF8400;
+    box-shadow: 0 1px 0 0 #FF8400
 }
 
 .chips:hover {
@@ -25700,7 +25700,7 @@ button.toast-close-button {
 }
 
 .chips .tag.selected {
-    border-bottom: 1px solid #4285F4;
+    border-bottom: 1px solid #FF8400;
     color: #fff
 }
 
@@ -26329,7 +26329,7 @@ button.toast-close-button {
 
 .picker__date-display {
     text-align: center;
-    background-color: #4285F4;
+    background-color: #FF8400;
     color: #fff;
     padding-bottom: 15px;
     font-weight: 300;
@@ -26389,7 +26389,7 @@ button.toast-close-button {
 }
 
 .picker__day.picker__day--today {
-    color: #4285F4
+    color: #FF8400
 }
 
 .picker__day.picker__day--today.picker__day--selected {
@@ -26407,7 +26407,7 @@ button.toast-close-button {
     -webkit-transform: scale(.9);
     -ms-transform: scale(.9);
     transform: scale(.9);
-    background-color: #4285F4;
+    background-color: #FF8400;
     color: #fff
 }
 
@@ -26435,7 +26435,7 @@ button.picker__today:focus {
 .picker__today {
     font-size: 1.1rem;
     padding: 0;
-    color: #4285F4
+    color: #FF8400
 }
 
 .picker__nav--next:before,
@@ -26781,7 +26781,7 @@ button.picker__today:focus {
 
 .btn-floating.btn-flat {
     padding: 0;
-    background: #4285F4
+    background: #FF8400
 }
 
 .btn-floating.btn-flat:focus,
@@ -27384,7 +27384,7 @@ button.picker__today:focus {
 }
 
 .mdb-feed .news .excerpt .brief a {
-    color: #4285F4
+    color: #FF8400
 }
 
 .mdb-feed .news .excerpt .brief .date,
@@ -27438,7 +27438,7 @@ button.picker__today:focus {
 
 .mdb-feed .news .excerpt .feed-footer span a {
     padding-right: .3rem;
-    color: #4285F4;
+    color: #FF8400;
     cursor: default
 }
 
@@ -27471,7 +27471,7 @@ button.picker__today:focus {
 }
 
 .card-personal .card-block .card-title.title-one:hover {
-    color: #4285F4
+    color: #FF8400
 }
 
 .card-personal .card-block .card-meta {
@@ -27490,7 +27490,7 @@ button.picker__today:focus {
 }
 
 .card-personal .card-block span:hover {
-    color: #4285F4
+    color: #FF8400
 }
 
 .news-card .content .right-side-meta {
@@ -28067,7 +28067,7 @@ div.bbp-submit-wrapper button:focus {
 #comments textarea {
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid #4285F4;
+    border-bottom: 1px solid #FF8400;
     border-radius: 0;
     outline: 0;
     height: 3rem;
@@ -28089,13 +28089,13 @@ div.bbp-submit-wrapper button:focus {
 }
 
 #comments textarea:focus:not([readonly]) {
-    border-bottom: 1px solid #4285F4;
-    -webkit-box-shadow: 0 1px 0 0 #4285F4;
-    box-shadow: 0 1px 0 0 #4285F4
+    border-bottom: 1px solid #FF8400;
+    -webkit-box-shadow: 0 1px 0 0 #FF8400;
+    box-shadow: 0 1px 0 0 #FF8400
 }
 
 #comments textarea:focus:not([readonly])+label {
-    color: #4285F4
+    color: #FF8400
 }
 
 #comments textarea+label:after {

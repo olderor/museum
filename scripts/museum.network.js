@@ -322,14 +322,13 @@ museum.network = (function() {
 
 
     function split() {
-        var allNodes = nodes;
-        var allNodesData = setDataToArray(allNodes);
+        var allNodesData = setDataToArray(nodes);
         var allEdgesData = setDataToArray(edges);
-        museum.algorithms.global_min_cut.setData(allNodes, allNodesData, allEdgesData);
+        museum.algorithms.global_min_cut.setData(nodes, allNodesData, edges, allEdgesData);
         var edgesToRemove = museum.algorithms.global_min_cut.getEdgesToRemove();
         for (var i = 0; i < edgesToRemove.length; ++i) {
             (function(i) {
-                museum.animation_manager.addAnimation({
+                museum.animation_manager.addForceAnimation({
                     block: function() {
                         edges.remove(edgesToRemove[i]);
                     },
