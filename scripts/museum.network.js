@@ -54,8 +54,7 @@ museum.network = (function() {
             },
             layout: {
                 improvedLayout: false
-            },
-            groups: groupsSettings
+            }
         };
     }
 
@@ -282,6 +281,7 @@ museum.network = (function() {
             type = museum.graphmanager.types.tracksGeneral;
         }
         var container = document.getElementById('mynetwork');
+        var options = getOptions();
         switch (type) {
             case museum.graphmanager.types.tracksGeneral:
                 setTracksNodes();
@@ -306,7 +306,7 @@ museum.network = (function() {
                 addLegend("id");
                 break;
         }
-        var options = getOptions();
+        options.groups = groupsSettings;
         var data = {
             nodes: nodes,
             edges: edges
