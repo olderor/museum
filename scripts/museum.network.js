@@ -9,16 +9,65 @@ museum.network = (function() {
     var onDrawingDone = null;
 
     var playlists = {};
-    
+
     var verticesWithoutEdges = [];
-    
+
     var shouldShowVerticesWithoutEdges = false;
     
+    function getOptions() {
+        return {
+            nodes: {
+                shape: 'dot',
+                size: 30,
+                font: {
+                    size: 32,
+                    color: '#ffffff'
+                },
+                borderWidth: 5
+            },
+            edges: {
+                width: 2
+            },
+            physics: {
+                stabilization: false,
+                minVelocity: 0
+            },
+            layout: {
+                improvedLayout: false
+            }
+        };
+    }
+
+    function getLabelOptions() {
+        return {
+            nodes: {
+                shape: 'dot',
+                size: 10,
+                font: {
+                    size: 12,
+                    color: '#ffffff'
+                },
+                borderWidth: 2
+            },
+            physics: {
+                stabilization: false,
+                minVelocity: 0
+            },
+            layout: {
+                improvedLayout: false
+            }
+        };
+    }
+
     function setDataToArray(data) {
         var dataIds = data.getIds();
         var allData = [];
         for (var i = 0; i < dataIds.length; ++i) {
-            allData.push(data.get(dataIds[i]));
+            let current = data.get(dataIds[i]);
+            if (current.isLabel) {
+                continue;
+            }
+            allData.push(current);
         }
         return allData;
     }
@@ -207,31 +256,12 @@ museum.network = (function() {
             type = museum.graphmanager.types.tracksGeneral;
         }
         var container = document.getElementById('mynetwork');
-        var options = {
-            nodes: {
-                shape: 'dot',
-                size: 30,
-                font: {
-                    size: 32,
-                    color: '#ffffff'
-                },
-                borderWidth: 5
-            },
-            edges: {
-                width: 2
-            },
-            physics: {
-                stabilization: false,
-                minVelocity: 0
-            },
-            layout: {
-                improvedLayout: false
-            }
-        };
+        var options = getOptions();
         switch (type) {
             case museum.graphmanager.types.tracksGeneral:
                 setTracksNodes();
                 setTracksEdges();
+                addLegend("guid");
                 break;
             case museum.graphmanager.types.tracksMultipartite:
                 options.layout["hierarchical"] = {
@@ -243,27 +273,28 @@ museum.network = (function() {
                 };
                 setTracksNodes();
                 setTracksEdges();
+                addLegend("guid");
                 break;
             case museum.graphmanager.types.playlistsGeneral:
                 setPlaylistsNodes();
                 setPlaylistsEdges();
+                addLegend("id");
                 break;
         }
-
         var data = {
             nodes: nodes,
             edges: edges
         };
-        
+
         if (!shouldShowVerticesWithoutEdges) {
             removeVerticesWithoutEdges();
         }
-        
+
         network = new vis.Network(container, data, options);
         network.once('afterDrawing', drawingDone);
     }
-    
-    
+
+
     function split() {
         var allNodes = setDataToArray(nodes);
         var allEdges = setDataToArray(edges);
@@ -273,19 +304,19 @@ museum.network = (function() {
             edges.remove(edgesToRemove[i]);
         }
     }
-    
+
     function removeVerticesWithoutEdges() {
         verticesWithoutEdges = [];
         var allNodes = setDataToArray(nodes);
         var allEdges = setDataToArray(edges);
-        
+
         var verticesHaveEdges = [];
         verticesHaveEdges.resize(allNodes.length, false);
         for (var i = 0; i < allEdges.length; ++i) {
             verticesHaveEdges[allEdges[i].fromNodeIndex] = true;
             verticesHaveEdges[allEdges[i].toNodeIndex] = true;
         }
-        
+
         for (var i = 0; i < allNodes.length; ++i) {
             if (verticesHaveEdges[i]) {
                 continue;
@@ -295,24 +326,55 @@ museum.network = (function() {
             nodes.remove(node.id);
         }
     }
-    
+
     function showVerticesWithoutEdges() {
         for (var i = 0; i < verticesWithoutEdges.length; ++i) {
             nodes.add(verticesWithoutEdges[i]);
         }
         verticesWithoutEdges = [];
     }
-    
+
     function filterVertices(withEdgesState) {
         if (withEdgesState) {
             shouldShowVerticesWithoutEdges = true;
             showVerticesWithoutEdges();
-        } else {
+        }
+        else {
             shouldShowVerticesWithoutEdges = false;
             removeVerticesWithoutEdges();
         }
     }
-    
+
+    function addLegend(groupBy) {
+        var mynetwork = document.getElementById('label-network');
+        var x = -mynetwork.clientWidth / 2 + 50;
+        var y = -mynetwork.clientHeight / 2 + 50;
+        var step = 70;
+        var used = {};
+        var labelNodes = [];
+        for (let guid in playlists) {
+            let playlist = playlists[guid];
+            let group = playlist[groupBy];
+            if (used[group]) {
+                continue;
+            }
+            used[group] = true;
+            labelNodes.push({
+                id: "label-" + group,
+                x: 50,
+                y: y,
+                label: playlist["name"] + " by " + playlist["owner"]["id"],
+                group: group,
+                fixed: true,
+                physics: false,
+                isLabel: true,
+                level: -1
+            });
+            y += step;
+        }
+        network = new vis.Network(mynetwork, { nodes: labelNodes}, getLabelOptions());
+    }
+
     return {
         setRandomData: setRandomData,
         setPlaylistsData: setPlaylistsData,

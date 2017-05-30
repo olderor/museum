@@ -144,3 +144,13 @@ canvas, .vis-network {
 .vertices-switch {
     padding-top: 10px;
 }
+
+#label-network {
+    border: 4px solid #FF8400;
+}
+
+.label-network-label {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
