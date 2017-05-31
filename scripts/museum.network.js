@@ -292,10 +292,9 @@ museum.network = (function() {
                 options.layout["hierarchical"] = {
                     enabled: true,
                     direction: 'LR',
-                    treeSpacing: 50,
-                    nodeDistance: 50,
-                    centralGravity: 50
+                    treeSpacing: 50
                 };
+                options.physics.enabled = false;
                 setTracksNodes();
                 setTracksEdges();
                 addLegend("guid");
@@ -416,6 +415,12 @@ museum.network = (function() {
         network = new vis.Network(mynetwork, {
             nodes: labelNodes
         }, getLabelOptions());
+    }
+    
+    function findMaxFlow() {
+        var allNodesData = setDataToArray(nodes);
+        var allEdgesData = setDataToArray(edges);
+        museum.algorithms.max_flow.findMaxFlow(nodes, allNodesData, edges, allEdgesData);
     }
 
     return {

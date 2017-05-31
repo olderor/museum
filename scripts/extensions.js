@@ -33,6 +33,14 @@ Array.prototype.resizeMatrix = Array.prototype.resizeMatrix || function(rowsSize
     this.length = rowsSize;
 };
 
+Array.prototype.clear = Array.prototype.clear || function() {
+    this.length = 0;
+};
+
+Array.prototype.empty = Array.prototype.empty || function() {
+    return this.length == 0;
+};
+
 function sleep(milliseconds) {
     var start = new Date().getTime();
     for (var i = 0; i < 1e7; i++) {
