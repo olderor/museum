@@ -15,7 +15,7 @@ museum.playlists = (function() {
     
     function filterDeletedPlaylists() {
         for (var i = 0; i < deletedPlaylists.length; ++i) {
-            playlists[deletedPlaylists[i]] = null;
+            delete playlists[deletedPlaylists[i]];
         }
     }
 
