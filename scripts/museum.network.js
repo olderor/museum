@@ -508,7 +508,7 @@ museum.network = (function() {
                     to: allNodesData[i].id,
                     fromNodeIndex: -1,
                     toNodeIndex: i,
-                    edgeValue: 1000000
+                    edgeValue: 1
                 }
                 edges.add(edge);
                 continue;
@@ -550,7 +550,8 @@ museum.network = (function() {
             nodeIds[allNodesData[i].nodeIndex] = allNodesData[i].id;
         }
         var allEdgesData = setDataToArray(edges);
-        museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var tracks = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        museum.playlists.createPlaylist(tracks);
         museum.animation_manager.processAnimation();
     }
 

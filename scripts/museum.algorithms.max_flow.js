@@ -368,11 +368,56 @@ museum.algorithms.max_flow = (function() {
 
         museum.animation_manager.addAnimation({
             block: function() {},
-            delay: 6000
+            delay: 3000
         });
+        
+        return updateEdgesValues();
+    }
 
+    function updateEdgesValues() {
+        var edgesFlows = {};
 
-        return result;
+        for (var i = 0; i < graph.length; ++i) {
+            for (var j = 0; j < graph[i].length; ++j) {
+                if (graph[i][j].flow < 0) {
+                    continue;
+                }
+                if (!edgesFlows[graph[i][j].id] || edgesFlows[graph[i][j].id] < graph[i][j].flow) {
+                    edgesFlows[graph[i][j].id] = graph[i][j].flow;
+                }
+            }
+        }
+        var updates = [];
+        var tracks = {};
+        for (var i = 0; i < allEdgesData.length; ++i) {
+            var value = edgesFlows[allEdgesData[i].id];
+            if (value != 0) {
+                updates.push({
+                    id: allEdgesData[i].id,
+                    label: '' + value,
+                    width: 15
+                });
+                tracks[allEdgesData[i].from] = true;
+                tracks[allEdgesData[i].to] = true;
+            }
+            else {
+                updates.push({
+                    id: allEdgesData[i].id,
+                    label: '',
+                    width: 1
+                });
+            }
+        }
+
+        (function(updates) {
+            museum.animation_manager.addForceAnimation({
+                block: function() {
+                    allEdges.update(updates);
+                },
+                delay: 0
+            });
+        })(updates);
+        return tracks;
     }
 
     function clear(vs) {

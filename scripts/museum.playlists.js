@@ -98,12 +98,17 @@ museum.playlists = (function() {
         type = graphType;
         showLoadingView();
     }
+    
+    function createPlaylist() {
+        
+    }
 
     return {
         init: init,
         addPlaylistUrl: addPlaylistUrl,
         deletePlaylist: deletePlaylist,
         process: process,
-        reprocess: reprocess
+        reprocess: reprocess,
+        createPlaylist: createPlaylist
     };
 })();
