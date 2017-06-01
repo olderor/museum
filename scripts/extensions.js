@@ -17,14 +17,14 @@ String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
         return str;
     };
 
-Array.prototype.resize = Array.prototype.resize || function(newSize, defaultValue) {
+Array.prototype.resize = Array.prototype.resize || function(newSize, defaultValue = 0) {
     while (newSize > this.length) {
         this.push(defaultValue);
     }
     this.length = newSize;
 };
 
-Array.prototype.resizeMatrix = Array.prototype.resizeMatrix || function(rowsSize, columnsSize, defaultValue) {
+Array.prototype.resizeMatrix = Array.prototype.resizeMatrix || function(rowsSize, columnsSize, defaultValue = 0) {
     while (rowsSize > this.length) {
         var row = [];
         row.resize(columnsSize, defaultValue);

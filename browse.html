@@ -102,11 +102,14 @@
                 </label>
               </div>
             </li>
-            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+            <li class="nav-item d-flex justify-content-center">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.stabilize();">Stabilize</button>
             </li>
-            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+            <li id="split-button" class="nav-item d-flex justify-content-center hidden">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.split();">Split</button>
+            </li>
+            <li id="find-flow-button" class="nav-item d-flex justify-content-center hidden">
+                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.findMaxFlow();">Flow</button>
             </li>
             <li class="nav-item"></li>
             <li>

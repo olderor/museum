@@ -12,6 +12,8 @@ museum.graphmanager = (function() {
         $('.nav-item-selected').removeClass('nav-item-selected');
         museum.playlists.reprocess(museum.graphmanager.types.tracksGeneral);
         $('#tracks-general-graph-item').addClass('nav-item-selected');
+        $('#find-flow-button').addClass('hidden');
+        $('#split-button').addClass('hidden');
     }
     
     function showTracksMultipartiteGraph() {
@@ -22,6 +24,8 @@ museum.graphmanager = (function() {
         $('.nav-item-selected').removeClass('nav-item-selected');
         museum.playlists.reprocess(museum.graphmanager.types.tracksMultipartite);
         $('#tracks-multipartite-graph-item').addClass('nav-item-selected');
+        $('#find-flow-button').removeClass('hidden');
+        $('#split-button').addClass('hidden');
     }
     
     function showPlaylistsGeneralGraph() {
@@ -32,6 +36,8 @@ museum.graphmanager = (function() {
         $('.nav-item-selected').removeClass('nav-item-selected');
         museum.playlists.reprocess(museum.graphmanager.types.playlistsGeneral);
         $('#playlists-general-graph-item').addClass('nav-item-selected');
+        $('#find-flow-button').addClass('hidden');
+        $('#split-button').removeClass('hidden');
     }
     
     function init() {

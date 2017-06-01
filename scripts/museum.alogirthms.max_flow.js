@@ -2,12 +2,12 @@ var museum = museum || {};
 museum.algorithms = museum.algorithms || {};
 museum.algorithms.max_flow = museum.algorithms.max_flow || {};
 museum.algorithms.max_flow = (function() {
-    
-    var allNodes = [];
-    var allNodesData = [];
-    var allEdges = [];
-    var allEdgesData = [];
-    
+
+    var allEdges;
+    var allNodes;
+    var allNodeIds;
+    var allEdgesData;
+
     var verticesCount;
     var graph = [];
     var edges = [];
@@ -15,23 +15,28 @@ museum.algorithms.max_flow = (function() {
     var excess = [];
     var used = [];
     var heightsCount = [];
-    
+
     var verticesQueue = [];
-    
-    function addEdge(from, to, cost) {
+
+    function addEdge(from, to, cost, id) {
         var edge = {
             from: from,
             to: to,
             cost: cost,
-            index: graph[to].length
+            index: graph[to].length,
+            flow: 0,
+            id: id
         };
         graph[from].push(edge);
         edges.push(edge);
-        
+
         edge = {
             from: to,
             to: from,
-            index: graph[from].length - 1
+            index: graph[from].length - 1,
+            flow: 0,
+            cost: 0,
+            id: id
         };
         graph[to].push(edge);
     }
@@ -45,6 +50,19 @@ museum.algorithms.max_flow = (function() {
         }
         used[vertex] = true;
         verticesQueue.push(vertex);
+        (function(vertexIndex, vertexId) {
+            museum.animation_manager.addAnimation({
+                block: function() {
+                    $('#description').text('Adding vertex ' + vertexIndex + ' to queue');
+                    allNodes.update([{
+                        id: vertexId,
+                        borderWidth: 20,
+                        color: "blue"
+                    }]);
+                },
+                delay: 2000
+            });
+        })(vertex, allNodeIds[vertex]);
     }
 
     function push(edge) {
@@ -59,11 +77,12 @@ museum.algorithms.max_flow = (function() {
             return;
         }
 
-        excess[edge.to] += dif;
-        excess[edge.from] -= dif;
+        updateExcess(edge.to, excess[edge.to] + dif);
+        updateExcess(edge.from, excess[edge.from] - dif);
 
-        edge.flow += dif;
-        graph[edge.to][edge.index].flow -= dif;
+        updateEdgeFlow(edge, graph[edge.to][edge.index], edge.flow + dif);
+        updateEdgeFlow(graph[edge.to][edge.index], edge, graph[edge.to][edge.index].flow - dif);
+
         enqueue(edge.to);
     }
 
@@ -72,7 +91,7 @@ museum.algorithms.max_flow = (function() {
             if (height[v] >= minHeigth) {
                 --heightsCount[height[v]];
                 if (height[v] < verticesCount + 1) {
-                    height[v] = verticesCount + 1;
+                    updateHeight(v, verticesCount + 1);
                 }
                 ++heightsCount[height[v]];
                 enqueue(v);
@@ -82,12 +101,26 @@ museum.algorithms.max_flow = (function() {
 
     function relabel(vertex) {
         --heightsCount[height[vertex]];
-        height[vertex] = verticesCount + verticesCount;
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').text('Setting height to infinity');
+            },
+            delay: 1000
+        });
+        updateHeight(vertex, verticesCount + verticesCount);
         for (var i = 0; i < graph[vertex].length; ++i) {
             if (graph[vertex][i].cost - graph[vertex][i].flow <= 0) {
                 continue;
             }
-            height[vertex] = Math.min(height[vertex], height[graph[vertex][i].to] + 1);
+            (function(prevValue, newValue) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Found edge with free space. Updating min-height from ' + prevValue + ' to ' + newValue);
+                    },
+                    delay: 3000
+                });
+            })(height[vertex], Math.min(height[vertex], height[graph[vertex][i].to] + 1));
+            updateHeight(vertex, Math.min(height[vertex], height[graph[vertex][i].to] + 1));
         }
         ++heightsCount[height[vertex]];
         enqueue(vertex);
@@ -96,13 +129,43 @@ museum.algorithms.max_flow = (function() {
     function discharge(vertex) {
         if (excess[vertex] > 0) {
             for (var i = 0; i < graph[vertex].length; ++i) {
+                (function(edgeId) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            $('#description').text('Trying to push edge');
+                            allEdges.update([{
+                                id: edgeId,
+                                width: 20
+                            }]);
+                        },
+                        delay: 3000
+                    });
+                })(graph[vertex][i].id);
                 push(graph[vertex][i]);
+                (function(edgeId) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            $('#description').text('Done pushing edge');
+                            allEdges.update([{
+                                id: edgeId,
+                                width: 2
+                            }]);
+                        },
+                        delay: 1000
+                    });
+                })(graph[vertex][i].id);
             }
         }
 
         if (excess[vertex] <= 0) {
             return;
         }
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').text('Excess left. Relabeling...');
+            },
+            delay: 1000
+        });
 
         if (heightsCount[height[vertex]] != 1) {
             relabel(vertex);
@@ -111,35 +174,195 @@ museum.algorithms.max_flow = (function() {
         removeHeight(height[vertex]);
     }
 
+    function updateVertex(vertex, delay = 3000) {
+        (function(vertexId, heightValue, excessValue) {
+            museum.animation_manager.addAnimation({
+                block: function() {
+                    allNodes.update([{
+                        id: vertexId,
+                        label: 'h: ' + heightValue + ', e: ' + excessValue
+                    }]);
+                },
+                delay: delay
+            });
+        })(allNodeIds[vertex], height[vertex], excess[vertex]);
+    }
+
+    function updateEdgeFlow(edge, back, value) {
+        edge.flow = value;
+        (function(edgeId, flow, cost, backFlow, backCost) {
+            museum.animation_manager.addAnimation({
+                block: function() {
+                    $('#description').text('Updating edge flow');
+                    allEdges.update([{
+                        id: edgeId,
+                        label: '' + backFlow + '/' + backCost + ', ' + flow + '/' + cost,
+                    }]);
+                },
+                delay: 3000
+            });
+        })(edge.id, edge.flow, edge.cost, back.flow, back.cost);
+    }
+
+    function updateHeight(vertex, value) {
+        height[vertex] = value;
+        updateVertex(vertex);
+    }
+
+    function updateExcess(vertex, value) {
+        excess[vertex] = value;
+        updateVertex(vertex);
+    }
+
     function maxflow() {
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').removeClass('hidden');
+            },
+            delay: 0
+        });
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').text('Initializing...');
+            },
+            delay: 0
+        });
+        for (var i = 0; i < verticesCount; ++i) {
+            updateVertex(i, 0);
+        }
         heightsCount[0] = verticesCount - 1;
         heightsCount[verticesCount] = 1;
-        height[0] = verticesCount;
+        updateHeight(0, verticesCount);
         used[0] = true;
         used[verticesCount - 1] = true;
+        museum.animation_manager.addAnimation({
+            block: function() {
+                $('#description').text('Done initializing');
+            },
+            delay: 1000
+        });
 
         for (var i = 0; i < graph[0].length; ++i) {
-            excess[0] += graph[0][i].cost;
+            (function(edgeId, vertexIndex, vertexId, value, mark) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Excessing vertex ' + vertexIndex + ' by ' + value);
+                        if (mark) {
+                            allNodes.update([{
+                                id: vertexId,
+                                borderWidth: 20,
+                                color: "yellow"
+                            }]);
+                        }
+                        allEdges.update([{
+                            id: edgeId,
+                            width: 10
+                        }]);
+                    },
+                    delay: 1000
+                });
+            })(graph[0][i].id, graph[0][i].to, allNodeIds[graph[0][i].to], graph[0][i].cost, !used[graph[0][i].to]);
+            updateExcess(0, excess[0] + graph[0][i].cost);
+            (function(edgeId) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Trying to push edge');
+                        allEdges.update([{
+                            id: edgeId,
+                            width: 20
+                        }]);
+                    },
+                    delay: 3000
+                });
+            })(graph[0][i].id);
             push(graph[0][i]);
+            (function(edgeId) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Done pushing edge');
+                        allEdges.update([{
+                            id: edgeId,
+                            width: 2
+                        }]);
+                    },
+                    delay: 1000
+                });
+            })(graph[0][i].id);
+            (function(vertexIndex, vertexId, mark) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Done excessing vertex ' + vertexIndex);
+                        if (mark) {
+                            var groupsSettings = museum.network.getGroupSettingsById(vertexId);
+                            allNodes.update([{
+                                id: vertexId,
+                                borderWidth: groupsSettings.borderWidth,
+                                color: groupsSettings.color
+                            }]);
+                        }
+                    },
+                    delay: 1000
+                });
+            })(i, allNodeIds[i], !used[graph[0][i].to]);
         }
 
         while (!verticesQueue.empty()) {
             var vertex = verticesQueue.shift();
             used[vertex] = false;
+            (function(vertexIndex, vertexId) {
+                museum.animation_manager.addAnimation({
+                    block: function() {
+                        $('#description').text('Discharging ' + vertexIndex);
+                        allNodes.update([{
+                            id: vertexId,
+                            color: "green"
+                        }]);
+                    },
+                    delay: 3000
+                });
+            })(vertex, allNodeIds[vertex]);
             discharge(vertex);
+            if (!used[vertex]) {
+                (function(vertexIndex, vertexId) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            var groupsSettings = museum.network.getGroupSettingsById(vertexId);
+                            allNodes.update([{
+                                id: vertexId,
+                                borderWidth: groupsSettings.borderWidth,
+                                color: groupsSettings.color
+                            }]);
+                        },
+                        delay: 1000
+                    });
+                })(vertex, allNodeIds[vertex]);
+            } else {
+                (function(vertexIndex, vertexId) {
+                    museum.animation_manager.addAnimation({
+                        block: function() {
+                            allNodes.update([{
+                                id: vertexId,
+                                color: "blue"
+                            }]);
+                        },
+                        delay: 1000
+                    });
+                })(vertex, allNodeIds[vertex]);
+            }
         }
 
         var result = 0;
         for (var i = 0; i < graph[0].length; ++i) {
             result += graph[0][i].flow;
         }
+        console.log('flow: ' + result);
         return result;
     }
 
     function clear(vs) {
         verticesCount = vs;
         graph.clear();
-        graph.resize(vs);
+        graph.resizeMatrix(vs, 0);
         edges.clear();
         height.clear();
         height.resize(vs);
@@ -149,21 +372,22 @@ museum.algorithms.max_flow = (function() {
         used.resize(vs);
         heightsCount.clear();
         heightsCount.resize(vs);
-        while (!verticesQueue.empty()) {
-            verticesQueue.pop();
+        verticesQueue.clear();
+    }
+
+    function initGraph() {
+        for (var i = 0; i < allEdgesData.length; ++i) {
+            addEdge(allEdgesData[i].fromNodeIndex, allEdgesData[i].toNodeIndex, allEdgesData[i].edgeValue, allEdgesData[i].id);
+            addEdge(allEdgesData[i].toNodeIndex, allEdgesData[i].fromNodeIndex, allEdgesData[i].edgeValue, allEdgesData[i].id);
         }
     }
-    
-    function initGraph() {
-        
-    }
-    
-    function findMaxFlow(nodes, nodesData, edges, edgesData) {
-        allNodes = nodes;
-        allNodesData = nodesData;
+
+    function findMaxFlow(nodes, edges, nodeIds, edgesData) {
         allEdges = edges;
+        allNodes = nodes;
+        allNodeIds = nodeIds;
         allEdgesData = edgesData;
-        clear(allNodesData.length);
+        clear(allNodeIds.length);
         initGraph();
         return maxflow();
     }

@@ -4,10 +4,13 @@ museum.animation_manager = (function() {
 
     var animations = [];
     var forceAnimations = [];
-
+    var animationId = 1;
+    var currentAnimationId = 0;
+    
     function clear() {
         animations = [];
         forceAnimations = [];
+        animationId += 1;
     }
 
     function shouldSkipAnimation() {
@@ -40,11 +43,15 @@ museum.animation_manager = (function() {
 
     function processAnimation(index) {
         if (!index) {
+            currentAnimationId = animationId;
             index = 0;
             if (shouldSkipAnimation()) {
                 processForceAnimation(0);
                 return;
             }
+        }
+        if (currentAnimationId != animationId) {
+            return;
         }
         if (index >= animations.length) {
             clear();

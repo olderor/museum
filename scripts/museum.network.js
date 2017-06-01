@@ -13,26 +13,33 @@ museum.network = (function() {
     var verticesWithoutEdges = [];
 
     var shouldShowVerticesWithoutEdges = false;
-    
+
     var groupsSettings = {};
     var groupsByIds = {};
-    
+
+    var fakeNodes = [];
+    var fakeEdges = [];
+
+    var level = 0;
+
     function getGroupSettings(group) {
         return groupsSettings[group];
-    }   
-    
+    }
+
     function getGroupSettingsById(id) {
         return groupsSettings[groupsByIds[id]];
     }
-    
-    
+
     function addGroupSettingsIfNeeded(group, id) {
         groupsByIds[id] = group;
         if (getGroupSettings(group)) {
             return;
         }
         var color = museum.random.getRandomColorRgba();
-        groupsSettings[group] = { color: color, borderWidth: 10 };
+        groupsSettings[group] = {
+            color: color,
+            borderWidth: 10
+        };
     }
 
     function getOptions() {
@@ -41,7 +48,7 @@ museum.network = (function() {
                 shape: 'dot',
                 size: 30,
                 font: {
-                    size: 32,
+                    size: 25,
                     color: '#ffffff'
                 }
             },
@@ -121,13 +128,14 @@ museum.network = (function() {
     function setTracksNodes() {
         nodes = new vis.DataSet();
         groupsSettings = {};
-        var level = 0;
+        level = 0;
+        var nodeIndex = 0;
         for (var guid in playlists) {
-            ++level;
             var playlist = playlists[guid];
             if (!playlist) {
                 continue;
             }
+            ++level;
             var tracks = playlist["tracks"]["items"];
             for (var i = 0; i < tracks.length; ++i) {
                 var track = tracks[i]["track"];
@@ -151,7 +159,7 @@ museum.network = (function() {
                     group: guid,
                     shape: 'circularImage',
                     level: level,
-
+                    nodeIndex: nodeIndex++,
                     trackId: track["id"]
                 });
             }
@@ -168,8 +176,8 @@ museum.network = (function() {
                         from: allNodes[i].id,
                         to: allNodes[j].id,
 
-                        fromNodeIndex: i,
-                        toNodeIndex: j,
+                        fromNodeIndex: allNodes[i].nodeIndex,
+                        toNodeIndex: allNodes[j].nodeIndex,
                         edgeValue: 1
                     });
                 }
@@ -180,8 +188,6 @@ museum.network = (function() {
     function setPlaylistsData(playlistsData) {
         playlists = playlistsData;
     }
-
-
 
     function setPlaylistsNodes() {
         nodes = new vis.DataSet();
@@ -297,6 +303,11 @@ museum.network = (function() {
                 options.physics.enabled = false;
                 setTracksNodes();
                 setTracksEdges();
+                createStartAndFinish();
+                groupsSettings["fake"] = {
+                    color: "#FF8400",
+                    borderWidth: 10
+                };
                 addLegend("guid");
                 break;
             case museum.graphmanager.types.playlistsGeneral:
@@ -319,8 +330,8 @@ museum.network = (function() {
         network.once('afterDrawing', drawingDone);
     }
 
-
     function split() {
+        museum.animation_manager.clear();
         var allNodesData = setDataToArray(nodes);
         var allEdgesData = setDataToArray(edges);
         museum.algorithms.global_min_cut.setData(nodes, allNodesData, edges, allEdgesData);
@@ -416,11 +427,87 @@ museum.network = (function() {
             nodes: labelNodes
         }, getLabelOptions());
     }
-    
-    function findMaxFlow() {
+
+    function createStartAndFinish() {
+        var start = {
+            id: museum.random.guid(),
+            title: 'start',
+            label: 'start',
+            group: 'fake',
+            shape: 'circularImage',
+            image: 'img/start.png',
+            level: 0,
+            nodeIndex: 0
+        };
+        var finish = {
+            id: museum.random.guid(),
+            title: 'finish',
+            label: 'finish',
+            group: 'fake',
+            shape: 'circularImage',
+            image: 'img/finish.png',
+            level: level + 1,
+            nodeIndex: nodes.length + 1
+        };
+        groupsByIds[start.id] = "fake";
+        groupsByIds[finish.id] = "fake";
         var allNodesData = setDataToArray(nodes);
+        for (var i = 0; i < allNodesData.length; ++i) {
+            ++allNodesData[i].nodeIndex;
+            nodes.update([{
+                id: allNodesData[i].id,
+                nodeIndex: allNodesData[i].nodeIndex
+            }]);
+            if (allNodesData[i].level == 1) {
+                var edge = {
+                    from: start.id,
+                    to: allNodesData[i].id,
+                    fromNodeIndex: -1,
+                    toNodeIndex: i,
+                    edgeValue: 1
+                }
+                edges.add(edge);
+                continue;
+            }
+            if (allNodesData[i].level == level) {
+                var edge = {
+                    from: allNodesData[i].id,
+                    to: finish.id,
+                    fromNodeIndex: i,
+                    toNodeIndex: allNodesData.length,
+                    edgeValue: 1
+                }
+                edges.add(edge);
+                continue;
+            }
+        }
+
+        nodes.add(start);
+        nodes.add(finish);
+
         var allEdgesData = setDataToArray(edges);
-        museum.algorithms.max_flow.findMaxFlow(nodes, allNodesData, edges, allEdgesData);
+        for (var i = 0; i < allEdgesData.length; ++i) {
+            ++allEdgesData[i].fromNodeIndex;
+            ++allEdgesData[i].toNodeIndex;
+            edges.update([{
+                id: allEdgesData[i].id,
+                fromNodeIndex: allEdgesData[i].fromNodeIndex,
+                toNodeIndex: allEdgesData[i].toNodeIndex,
+            }]);
+        }
+    }
+
+    function findMaxFlow() {
+        museum.animation_manager.clear();
+        var allNodesData = setDataToArray(nodes);
+        var nodeIds = [];
+        nodeIds.resize(allNodesData.length);
+        for (var i = 0; i < allNodesData.length; ++i) {
+            nodeIds[allNodesData[i].nodeIndex] = allNodesData[i].id;
+        }
+        var allEdgesData = setDataToArray(edges);
+        museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        museum.animation_manager.processAnimation();
     }
 
     return {
@@ -431,6 +518,7 @@ museum.network = (function() {
         split: split,
         filterVertices: filterVertices,
         getGroupSettings: getGroupSettings,
-        getGroupSettingsById: getGroupSettingsById
+        getGroupSettingsById: getGroupSettingsById,
+        findMaxFlow: findMaxFlow
     };
 })();
