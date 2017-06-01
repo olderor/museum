@@ -187,7 +187,7 @@ museum.network = (function() {
         }
     }
 
-    function setTracksEdges() {
+    function setTracksEdges(recalculatePopularity = false) {
         edges = new vis.DataSet();
         var allNodes = setDataToArray(nodes);
         for (var i = 0; i < allNodes.length; ++i) {
@@ -201,7 +201,29 @@ museum.network = (function() {
                         toNodeIndex: allNodes[j].nodeIndex,
                         edgeValue: 1
                     });
+                    if (recalculatePopularity) {
+                        if (!allNodes[i]["value"]) {
+                            allNodes[i]["value"] = 0;
+                        }
+                        ++allNodes[i].value;
+                        if (!allNodes[j]["value"]) {
+                            allNodes[j]["value"] = 0;
+                        }
+                        ++allNodes[j].value;
+                    }
                 }
+            }
+        }
+        if (recalculatePopularity) {
+            for (var i = 0; i < allNodes.length; ++i) {
+                if (!allNodes[i].value) {
+                    allNodes[i].value = 0;
+                }
+                nodes.update({
+                    id: allNodes[i].id,
+                    value: allNodes[i].value,
+                    label: '' + allNodes[i].value
+                });
             }
         }
     }
@@ -275,7 +297,7 @@ museum.network = (function() {
                 toPlaylist = playlist;
                 --nodeIndex;
             }
-            
+
             nodes.add({
                 id: guid,
                 title: playlist["name"] + " by " + playlist["owner"]["id"],
@@ -306,6 +328,19 @@ museum.network = (function() {
             }
         }
         return count;
+    }
+
+    function setSimilarTracksIds(first, second, tracksIds) {
+        var trackIds = {};
+        for (var i = 0; i < first.length; ++i) {
+            trackIds[first[i]["track"]["id"]] = true;
+        }
+        for (var i = 0; i < second.length; ++i) {
+            let res = trackIds[second[i]["track"]["id"]];
+            if (res) {
+                tracksIds[second[i]["track"]["id"]] = true;
+            }
+        }
     }
 
     function setPlaylistsEdges() {
@@ -366,7 +401,7 @@ museum.network = (function() {
         switch (type) {
             case museum.graphmanager.types.tracksGeneral:
                 setTracksNodes();
-                setTracksEdges();
+                setTracksEdges(true);
                 addLegend("guid");
                 break;
             case museum.graphmanager.types.tracksMultipartite:
@@ -597,7 +632,18 @@ museum.network = (function() {
             nodeIds[allNodesData[i].nodeIndex] = allNodesData[i].id;
         }
         var allEdgesData = setDataToArray(edges);
-        var tracks = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var flowEdges = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var tracks = {};
+        for (var i = 0; i < flowEdges.length; ++i) {
+            var node = nodes.get(flowEdges[i].from);
+            if (node && node.trackId) {
+                tracks[node.trackId] = true;
+            }
+            node = nodes.get(flowEdges[i].to);
+            if (node && node.trackId) {
+                tracks[node.trackId] = true;
+            }
+        }
         var trackIds = [];
         for (var track in tracks) {
             trackIds.push(track);
@@ -605,7 +651,7 @@ museum.network = (function() {
         museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         museum.animation_manager.processAnimation();
     }
-    
+
     function findMaxFlowPlaylists() {
         museum.animation_manager.clear();
         var allNodesData = setDataToArray(nodes);
@@ -615,15 +661,23 @@ museum.network = (function() {
             nodeIds[allNodesData[i].nodeIndex] = allNodesData[i].id;
         }
         var allEdgesData = setDataToArray(edges);
-        var tracks = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var flowEdges = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var tracks = {};
+        for (var i = 0; i < flowEdges.length; ++i) {
+            var frPl = playlists[flowEdges[i].from];
+            var tpPl = playlists[flowEdges[i].to];
+            if (frPl && tpPl) {
+                setSimilarTracksIds(playlists[flowEdges[i].from].tracks.items, playlists[flowEdges[i].to].tracks.items, tracks);
+            }
+        }
         var trackIds = [];
         for (var track in tracks) {
             trackIds.push(track);
         }
-        // museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         museum.animation_manager.processAnimation();
     }
-    
+
     function findMaxFlow() {
         switch (networkType) {
             case museum.graphmanager.types.tracksMultipartite:

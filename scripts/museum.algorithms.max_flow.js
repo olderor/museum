@@ -388,7 +388,7 @@ museum.algorithms.max_flow = (function() {
             }
         }
         var updates = [];
-        var tracks = {};
+        var flowEdges = [];
         for (var i = 0; i < allEdgesData.length; ++i) {
             var value = edgesFlows[allEdgesData[i].id];
             if (value != 0) {
@@ -397,14 +397,7 @@ museum.algorithms.max_flow = (function() {
                     label: '' + value,
                     width: 15
                 });
-                var node = allNodes.get(allEdgesData[i].from);
-                if (node && node.trackId) {
-                    tracks[node.trackId] = true;
-                }
-                node = allNodes.get(allEdgesData[i].to);
-                if (node && node.trackId) {
-                    tracks[node.trackId] = true;
-                }
+                flowEdges.push(allEdgesData[i]);
             }
             else {
                 updates.push({
@@ -423,7 +416,7 @@ museum.algorithms.max_flow = (function() {
                 delay: 0
             });
         })(updates);
-        return tracks;
+        return flowEdges;
     }
 
     function clear(vs) {
