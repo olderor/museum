@@ -40,11 +40,24 @@ museum.graphmanager = (function() {
         $('#split-button').removeClass('hidden');
     }
     
+    function showPlaylistsMultipartiteGraph() {
+        if (loading) {
+            return;
+        }
+        loading = true;
+        $('.nav-item-selected').removeClass('nav-item-selected');
+        museum.playlists.reprocess(museum.graphmanager.types.playlistsMultipartite);
+        $('#playlists-multipartite-graph-item').addClass('nav-item-selected');
+        $('#find-flow-button').removeClass('hidden');
+        $('#split-button').addClass('hidden');
+    }
+    
     function init() {
         $('#tracks-general-graph-item').click(showTracksGeneralGraph);
         $('#tracks-multipartite-graph-item').click(showTracksMultipartiteGraph);
         
         $('#playlists-general-graph-item').click(showPlaylistsGeneralGraph);
+        $('#playlists-multipartite-graph-item').click(showPlaylistsMultipartiteGraph);
     }
     
     function loadingDone() {

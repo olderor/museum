@@ -5,10 +5,12 @@ museum.graphmanager.types = (function() {
     let tracksGeneral = 'tracks-general';
     let tracksMultipartite = 'tracks-multipartite';
     let playlistsGeneral = 'playlists-general';
+    let playlistsMultipartite = 'playlists-multipartite';
     
     return {
         tracksGeneral: tracksGeneral,
         tracksMultipartite: tracksMultipartite,
-        playlistsGeneral: playlistsGeneral
+        playlistsGeneral: playlistsGeneral,
+        playlistsMultipartite: playlistsMultipartite
     };
 })();

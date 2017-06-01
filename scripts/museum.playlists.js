@@ -12,6 +12,8 @@ museum.playlists = (function() {
     var artistGenres = {};
 
     var type = null;
+    var first = true;
+    var last = null;
     
     function filterDeletedPlaylists() {
         for (var i = 0; i < deletedPlaylists.length; ++i) {
@@ -34,6 +36,14 @@ museum.playlists = (function() {
     }
 
     function addPlaylistData(playlistData) {
+        if (first) {
+            playlistData["first"] = true;
+            first = false;
+        } else {
+            last["last"] = false;
+        }
+        playlistData["last"] = true;
+        last = playlistData;
         var guid = playlistData.guid;
         playlists[guid] = playlistData;
         $('#spinner-' + guid).hide();

@@ -2,7 +2,7 @@ var museum = museum || {};
 museum.network = museum.network || {};
 museum.network = (function() {
     var network = null;
-
+    var networkType;
     var nodes = null;
     var edges = null;
 
@@ -21,9 +21,9 @@ museum.network = (function() {
     var fakeEdges = [];
 
     var level = 0;
-    
+
     var authors = {};
-    
+
     var fromPlaylist, toPlaylist;
 
     function getGroupSettings(group) {
@@ -145,7 +145,7 @@ museum.network = (function() {
                 var track = tracks[i]["track"];
                 var artists = track["artists"];
                 var trackId = track["id"];
-                
+
                 var artistsNames = [];
                 var artistLabel = artists[0]["name"];
                 artistsNames.push(artists[0]["name"]);
@@ -164,6 +164,13 @@ museum.network = (function() {
                 }
                 let id = museum.random.guid();
                 addGroupSettingsIfNeeded(guid, id);
+
+                if (playlist["first"]) {
+                    fromPlaylist = playlist;
+                }
+                if (playlist["last"]) {
+                    toPlaylist = playlist;
+                }
                 nodes.add({
                     id: id,
                     title: artistLabel + " - " + track["name"],
@@ -198,7 +205,7 @@ museum.network = (function() {
             }
         }
     }
-    
+
     function getSimilarAuthorsCount(first, second) {
         var firstAuthors = authors[first];
         var secondAuthors = authors[second];
@@ -212,7 +219,7 @@ museum.network = (function() {
         }
         return count;
     }
-    
+
     function setSimilarTracksEdges() {
         edges = new vis.DataSet();
         var allNodes = setDataToArray(nodes);
@@ -240,6 +247,7 @@ museum.network = (function() {
     function setPlaylistsNodes() {
         nodes = new vis.DataSet();
         groupsSettings = {};
+        var nodeIndex = 0;
         for (var guid in playlists) {
             var playlist = playlists[guid];
             if (!playlist) {
@@ -253,14 +261,32 @@ museum.network = (function() {
             }
 
             addGroupSettingsIfNeeded(playlist["id"], guid);
+            level = 2;
+            var index = ++nodeIndex;
+            if (playlist["first"]) {
+                level = 1;
+                index = 0;
+                fromPlaylist = playlist;
+                --nodeIndex;
+            }
+            if (playlist["last"]) {
+                level = 3;
+                index = Object.size(playlists) - 1;
+                toPlaylist = playlist;
+                --nodeIndex;
+            }
+            
             nodes.add({
                 id: guid,
                 title: playlist["name"] + " by " + playlist["owner"]["id"],
                 image: imageUrl,
                 group: playlist["id"],
-                shape: 'circularImage'
+                shape: 'circularImage',
+                level: level,
+                nodeIndex: index
             });
         }
+        level = 3;
     }
 
     function getSimilarTracksCount(first, second) {
@@ -336,6 +362,7 @@ museum.network = (function() {
         }
         var container = document.getElementById('mynetwork');
         var options = getOptions();
+        networkType = type;
         switch (type) {
             case museum.graphmanager.types.tracksGeneral:
                 setTracksNodes();
@@ -351,7 +378,7 @@ museum.network = (function() {
                 options.physics.enabled = false;
                 setTracksNodes();
                 setSimilarTracksEdges();
-                createStartAndFinish();
+                createStartAndFinish(1);
                 groupsSettings["fake"] = {
                     color: "#FF8400",
                     borderWidth: 10
@@ -361,6 +388,22 @@ museum.network = (function() {
             case museum.graphmanager.types.playlistsGeneral:
                 setPlaylistsNodes();
                 setPlaylistsEdges();
+                addLegend("id");
+                break;
+            case museum.graphmanager.types.playlistsMultipartite:
+                options.layout["hierarchical"] = {
+                    enabled: true,
+                    direction: 'LR',
+                    treeSpacing: 50
+                };
+                options.physics.enabled = false;
+                setPlaylistsNodes();
+                setPlaylistsEdges();
+                createStartAndFinish();
+                groupsSettings["fake"] = {
+                    color: "#FF8400",
+                    borderWidth: 10
+                };
                 addLegend("id");
                 break;
         }
@@ -417,7 +460,7 @@ museum.network = (function() {
         }
 
         for (var i = 0; i < allNodes.length; ++i) {
-            if (verticesHaveEdges[i]) {
+            if (verticesHaveEdges[allNodes[i].nodeIndex]) {
                 continue;
             }
             var node = nodes.get(allNodes[i].id);
@@ -476,9 +519,7 @@ museum.network = (function() {
         }, getLabelOptions());
     }
 
-    function createStartAndFinish() {
-        fromPlaylist = undefined;
-        toPlaylist = undefined;
+    function createStartAndFinish(startValue = 1000000, finishValue = 1000000) {
         var start = {
             id: museum.random.guid(),
             title: 'start',
@@ -514,12 +555,9 @@ museum.network = (function() {
                     to: allNodesData[i].id,
                     fromNodeIndex: -1,
                     toNodeIndex: i,
-                    edgeValue: 1
+                    edgeValue: startValue
                 }
                 edges.add(edge);
-                if (!fromPlaylist) {
-                    fromPlaylist = { name: allNodesData[i].playlistName, owner: allNodesData[i].playlistOwner };
-                }
                 continue;
             }
             if (allNodesData[i].level == level) {
@@ -528,10 +566,7 @@ museum.network = (function() {
                     to: finish.id,
                     fromNodeIndex: i,
                     toNodeIndex: allNodesData.length,
-                    edgeValue: 1000000
-                }
-                if (!toPlaylist) {
-                    toPlaylist = { name: allNodesData[i].playlistName, owner: allNodesData[i].playlistOwner };
+                    edgeValue: finishValue
                 }
                 edges.add(edge);
                 continue;
@@ -553,7 +588,7 @@ museum.network = (function() {
         }
     }
 
-    function findMaxFlow() {
+    function findMaxFlowTracks() {
         museum.animation_manager.clear();
         var allNodesData = setDataToArray(nodes);
         var nodeIds = [];
@@ -567,8 +602,37 @@ museum.network = (function() {
         for (var track in tracks) {
             trackIds.push(track);
         }
-        museum.spotify.createPlaylist(fromPlaylist.owner, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         museum.animation_manager.processAnimation();
+    }
+    
+    function findMaxFlowPlaylists() {
+        museum.animation_manager.clear();
+        var allNodesData = setDataToArray(nodes);
+        var nodeIds = [];
+        nodeIds.resize(allNodesData.length);
+        for (var i = 0; i < allNodesData.length; ++i) {
+            nodeIds[allNodesData[i].nodeIndex] = allNodesData[i].id;
+        }
+        var allEdgesData = setDataToArray(edges);
+        var tracks = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
+        var trackIds = [];
+        for (var track in tracks) {
+            trackIds.push(track);
+        }
+        // museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        museum.animation_manager.processAnimation();
+    }
+    
+    function findMaxFlow() {
+        switch (networkType) {
+            case museum.graphmanager.types.tracksMultipartite:
+                findMaxFlowTracks();
+                break;
+            case museum.graphmanager.types.playlistsMultipartite:
+                findMaxFlowPlaylists();
+                break;
+        }
     }
 
     return {
