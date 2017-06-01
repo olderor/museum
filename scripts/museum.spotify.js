@@ -9,7 +9,10 @@ museum.spotify = (function() {
 
     var apiGetPlaylistInfoUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}";
     var apiGetAccessToken = "https://accounts.spotify.com/api/token";
-    
+    var apiCreatePlaylistUrl = "https://api.spotify.com/v1/users/{user_id}/playlists";
+    var apiAddTracksToPlaylistUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks";
+    var playlistUrl = "http://open.spotify.com/user/{user_id}/playlist/{playlist_id}";
+
     /**
      * Takes playlist open url similar to https://open.spotify.com/user/{user_id}/playlist/{playlist_id}
      * Return playlist object with specified user_id and playlist_id that were retrieved from url.
@@ -102,15 +105,15 @@ museum.spotify = (function() {
         expiresIn = museum.parser.getParameterByName('expires_in', url);
         refreshToken = museum.parser.getParameterByName('refresh_token', url);
     }
-    
-    
+
+
     function loadNextSongsIfNeed(playlistData, onDone, onError) {
         var nextUrl = playlistData["tracks"]["next"];
         if (!nextUrl) {
             onDone(playlistData);
             return;
         }
-        
+
         $.ajax({
             url: nextUrl,
             type: 'get',
@@ -134,11 +137,91 @@ museum.spotify = (function() {
         });
     }
 
+    function createEmptyPlaylist(userId, name, onDone) {
+        var url = apiCreatePlaylistUrl.formatUnicorn({
+            user_id: userId,
+        });
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: JSON.stringify({
+                name: name
+            }),
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        }).done(function(data) {
+            onDone(data);
+        }).fail(function(xhr, err) {
+            var message = "Playlist error.";
+            if (xhr && xhr.statusText) {
+                message += " " + xhr.statusText + ".";
+            }
+            if (xhr && xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) {
+                message += " " + xhr.responseJSON.error.message;
+            }
+            message += " Check your playlist link: " + url;
+            console.log(message);
+        });
+    }
+
+    function addTracksToPlaylists(userId, playlistId, tracksIds, offset) {
+        if (offset >= tracksIds.length) {
+            var url = playlistUrl.formatUnicorn({
+                user_id: userId,
+                playlist_id: playlistId
+            });
+            openInNewTab(url);
+            return;
+        }
+
+        var url = apiAddTracksToPlaylistUrl.formatUnicorn({
+            user_id: userId,
+            playlist_id: playlistId
+        });
+        var data = [];
+        var newOffset = offset;
+        for (var i = 0; i < 100 && newOffset < tracksIds.length; ++i, newOffset = offset + i) {
+            data.push('spotify:track:' + tracksIds[i]);
+        }
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: JSON.stringify({
+                'uris': data
+            }),
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        }).done(function(data) {
+            addTracksToPlaylists(userId, playlistId, tracksIds, newOffset);
+        }).fail(function(xhr, err) {
+            var message = "Playlist error.";
+            if (xhr && xhr.statusText) {
+                message += " " + xhr.statusText + ".";
+            }
+            if (xhr && xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) {
+                message += " " + xhr.responseJSON.error.message;
+            }
+            message += " Check your playlist link: " + url;
+            console.log(message);
+        });
+    }
+
+    function createPlaylist(userId, name, tracks) {
+        createEmptyPlaylist(userId, name, function(data) {
+            addTracksToPlaylists(userId, data["id"], tracks, 0, data['']);
+        });
+    }
+
     return {
         init: init,
         parsePlaylistUrl: parsePlaylistUrl,
         getPlaylistInfo: getPlaylistInfo,
         getPlaylistInfoFromUrl: getPlaylistInfoFromUrl,
-        updateUserToken: updateUserToken
+        updateUserToken: updateUserToken,
+        createEmptyPlaylist: createEmptyPlaylist,
+        createPlaylist: createPlaylist
     };
 })();

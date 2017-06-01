@@ -49,3 +49,8 @@ function sleep(milliseconds) {
         }
     }
 }
+
+function openInNewTab(url) {
+    var win = window.open(url, '_blank');
+    win.focus();
+}

@@ -397,8 +397,14 @@ museum.algorithms.max_flow = (function() {
                     label: '' + value,
                     width: 15
                 });
-                tracks[allEdgesData[i].from] = true;
-                tracks[allEdgesData[i].to] = true;
+                var node = allNodes.get(allEdgesData[i].from);
+                if (node && node.trackId) {
+                    tracks[node.trackId] = true;
+                }
+                node = allNodes.get(allEdgesData[i].to);
+                if (node && node.trackId) {
+                    tracks[node.trackId] = true;
+                }
             }
             else {
                 updates.push({

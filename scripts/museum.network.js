@@ -23,6 +23,8 @@ museum.network = (function() {
     var level = 0;
     
     var authors = {};
+    
+    var fromPlaylist, toPlaylist;
 
     function getGroupSettings(group) {
         return groupsSettings[group];
@@ -170,7 +172,9 @@ museum.network = (function() {
                     shape: 'circularImage',
                     level: level,
                     nodeIndex: nodeIndex++,
-                    trackId: trackId
+                    trackId: trackId,
+                    playlistOwner: playlist["owner"]["id"],
+                    playlistName: playlist["name"]
                 });
             }
         }
@@ -473,6 +477,8 @@ museum.network = (function() {
     }
 
     function createStartAndFinish() {
+        fromPlaylist = undefined;
+        toPlaylist = undefined;
         var start = {
             id: museum.random.guid(),
             title: 'start',
@@ -511,6 +517,9 @@ museum.network = (function() {
                     edgeValue: 1
                 }
                 edges.add(edge);
+                if (!fromPlaylist) {
+                    fromPlaylist = { name: allNodesData[i].playlistName, owner: allNodesData[i].playlistOwner };
+                }
                 continue;
             }
             if (allNodesData[i].level == level) {
@@ -520,6 +529,9 @@ museum.network = (function() {
                     fromNodeIndex: i,
                     toNodeIndex: allNodesData.length,
                     edgeValue: 1000000
+                }
+                if (!toPlaylist) {
+                    toPlaylist = { name: allNodesData[i].playlistName, owner: allNodesData[i].playlistOwner };
                 }
                 edges.add(edge);
                 continue;
@@ -551,7 +563,11 @@ museum.network = (function() {
         }
         var allEdgesData = setDataToArray(edges);
         var tracks = museum.algorithms.max_flow.findMaxFlow(nodes, edges, nodeIds, allEdgesData);
-        museum.playlists.createPlaylist(tracks);
+        var trackIds = [];
+        for (var track in tracks) {
+            trackIds.push(track);
+        }
+        museum.spotify.createPlaylist(fromPlaylist.owner, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         museum.animation_manager.processAnimation();
     }
 
