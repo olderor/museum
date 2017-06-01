@@ -215,7 +215,7 @@ museum.algorithms.max_flow = (function() {
     }
 
     function maxflow() {
-        museum.animation_manager.addAnimation({
+        museum.animation_manager.addForceAnimation({
             block: function() {
                 $('#description').removeClass('hidden');
             },
@@ -336,7 +336,8 @@ museum.algorithms.max_flow = (function() {
                         delay: 1000
                     });
                 })(vertex, allNodeIds[vertex]);
-            } else {
+            }
+            else {
                 (function(vertexIndex, vertexId) {
                     museum.animation_manager.addAnimation({
                         block: function() {
@@ -355,7 +356,22 @@ museum.algorithms.max_flow = (function() {
         for (var i = 0; i < graph[0].length; ++i) {
             result += graph[0][i].flow;
         }
-        console.log('flow: ' + result);
+
+        (function(value) {
+            museum.animation_manager.addForceAnimation({
+                block: function() {
+                    $('#description').text('Done. Max flow value ' + value);
+                },
+                delay: 0
+            });
+        })(result);
+
+        museum.animation_manager.addAnimation({
+            block: function() {},
+            delay: 6000
+        });
+
+
         return result;
     }
 

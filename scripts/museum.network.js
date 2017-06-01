@@ -21,6 +21,8 @@ museum.network = (function() {
     var fakeEdges = [];
 
     var level = 0;
+    
+    var authors = {};
 
     function getGroupSettings(group) {
         return groupsSettings[group];
@@ -140,9 +142,17 @@ museum.network = (function() {
             for (var i = 0; i < tracks.length; ++i) {
                 var track = tracks[i]["track"];
                 var artists = track["artists"];
+                var trackId = track["id"];
+                
+                var artistsNames = [];
                 var artistLabel = artists[0]["name"];
+                artistsNames.push(artists[0]["name"]);
                 for (var j = 1; j < artists.length; ++j) {
+                    artistsNames.push(artists[j]["name"]);
                     artistLabel += ", " + artists[j]["name"];
+                }
+                if (!authors[trackId]) {
+                    authors[trackId] = artistsNames;
                 }
 
                 var image = museum.parser.getImageWithMinimumSize(track["album"]);
@@ -160,7 +170,7 @@ museum.network = (function() {
                     shape: 'circularImage',
                     level: level,
                     nodeIndex: nodeIndex++,
-                    trackId: track["id"]
+                    trackId: trackId
                 });
             }
         }
@@ -179,6 +189,40 @@ museum.network = (function() {
                         fromNodeIndex: allNodes[i].nodeIndex,
                         toNodeIndex: allNodes[j].nodeIndex,
                         edgeValue: 1
+                    });
+                }
+            }
+        }
+    }
+    
+    function getSimilarAuthorsCount(first, second) {
+        var firstAuthors = authors[first];
+        var secondAuthors = authors[second];
+        var count = 0;
+        for (var i = 0; i < firstAuthors.length; ++i) {
+            for (var j = 0; j < secondAuthors.length; ++j) {
+                if (firstAuthors[i] == secondAuthors[j]) {
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
+    
+    function setSimilarTracksEdges() {
+        edges = new vis.DataSet();
+        var allNodes = setDataToArray(nodes);
+        for (var i = 0; i < allNodes.length; ++i) {
+            for (var j = i + 1; j < allNodes.length; ++j) {
+                var count = getSimilarAuthorsCount(allNodes[i].trackId, allNodes[j].trackId);
+                if (count != 0) {
+                    edges.add({
+                        from: allNodes[i].id,
+                        to: allNodes[j].id,
+                        label: '' + count,
+                        fromNodeIndex: allNodes[i].nodeIndex,
+                        toNodeIndex: allNodes[j].nodeIndex,
+                        edgeValue: count
                     });
                 }
             }
@@ -302,7 +346,7 @@ museum.network = (function() {
                 };
                 options.physics.enabled = false;
                 setTracksNodes();
-                setTracksEdges();
+                setSimilarTracksEdges();
                 createStartAndFinish();
                 groupsSettings["fake"] = {
                     color: "#FF8400",
@@ -464,7 +508,7 @@ museum.network = (function() {
                     to: allNodesData[i].id,
                     fromNodeIndex: -1,
                     toNodeIndex: i,
-                    edgeValue: 1
+                    edgeValue: 1000000
                 }
                 edges.add(edge);
                 continue;
@@ -475,7 +519,7 @@ museum.network = (function() {
                     to: finish.id,
                     fromNodeIndex: i,
                     toNodeIndex: allNodesData.length,
-                    edgeValue: 1
+                    edgeValue: 1000000
                 }
                 edges.add(edge);
                 continue;
