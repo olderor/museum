@@ -498,15 +498,14 @@ museum.network = (function() {
             if (verticesHaveEdges[allNodes[i].nodeIndex]) {
                 continue;
             }
-            var node = nodes.get(allNodes[i].id);
-            verticesWithoutEdges.push(node);
-            nodes.remove(node.id);
+            verticesWithoutEdges.push(allNodes[i].id);
+            nodes.update({id: allNodes[i].id, hidden: true});
         }
     }
 
     function showVerticesWithoutEdges() {
         for (var i = 0; i < verticesWithoutEdges.length; ++i) {
-            nodes.add(verticesWithoutEdges[i]);
+            nodes.update({id: verticesWithoutEdges[i], hidden: false});
         }
         verticesWithoutEdges = [];
     }
