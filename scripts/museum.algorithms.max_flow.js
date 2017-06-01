@@ -365,6 +365,10 @@ museum.algorithms.max_flow = (function() {
                 delay: 0
             });
         })(result);
+        
+        if (result == 0) {
+            return [];
+        }
 
         museum.animation_manager.addAnimation({
             block: function() {},

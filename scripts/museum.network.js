@@ -648,7 +648,9 @@ museum.network = (function() {
         for (var track in tracks) {
             trackIds.push(track);
         }
-        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        if (trackIds.length != 0) {
+            museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        }
         museum.animation_manager.processAnimation();
     }
 
@@ -674,7 +676,9 @@ museum.network = (function() {
         for (var track in tracks) {
             trackIds.push(track);
         }
-        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        if (trackIds.length != 0) {
+            museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+        }
         museum.animation_manager.processAnimation();
     }
 
