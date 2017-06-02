@@ -166,3 +166,9 @@ canvas, .vis-network {
 .animation-speed-range-container {
     padding: 0 20px;
 }
+
+.reset-button-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

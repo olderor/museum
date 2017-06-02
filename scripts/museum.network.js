@@ -692,6 +692,18 @@ museum.network = (function() {
         }
     }
 
+    function formTop() {
+        var count = 10;
+        var data = setDataToArray(nodes);
+        data = museum.algorithms.quick_sort.quickSort(data, function(first, second) { return first.value <= second.value; });
+        data = data.slice(0, count);
+        var trackIds = [];
+        for (var i = 0; i < data.length; ++i) {
+            trackIds.push(data[i].trackId);
+        }
+        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Top 10 songs", trackIds);
+    }
+
     return {
         setRandomData: setRandomData,
         setPlaylistsData: setPlaylistsData,
@@ -701,6 +713,7 @@ museum.network = (function() {
         filterVertices: filterVertices,
         getGroupSettings: getGroupSettings,
         getGroupSettingsById: getGroupSettingsById,
-        findMaxFlow: findMaxFlow
+        findMaxFlow: findMaxFlow,
+        formTop: formTop
     };
 })();

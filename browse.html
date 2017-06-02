@@ -77,6 +77,9 @@
                     </a>
             </li>
             <li class="nav-item"></li>
+            <li class="nav-item reset-button-container d-flex justify-content-center">
+                <button type="button" class="btn btn-danger waves-effect waves-light z-depth-4 option-button" onclick="location.reload();">Clear</button>
+            </li>
         </ul>
         
         <div id="mynetwork" class="full-size"></div>
@@ -117,6 +120,9 @@
             </li>
             <li id="find-flow-button" class="nav-item d-flex justify-content-center hidden">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.findMaxFlow();">Flow</button>
+            </li>
+            <li id="get-top-button" class="nav-item d-flex justify-content-center">
+                <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.network.formTop();">Get top songs</button>
             </li>
             <li class="nav-item"></li>
             <li>

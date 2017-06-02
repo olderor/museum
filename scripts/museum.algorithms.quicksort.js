@@ -2,7 +2,7 @@ var museum = museum || {};
 museum.algorithms = museum.algorithms || {};
 museum.algorithms.quick_sort = museum.algorithms.quick_sort || {};
 museum.algorithms.quick_sort = (function() {
-    function quickSort(data) {
+    function quickSort(data, cmp = function(first, second) {return first <= second; }) {
         if (data.length === 0) {
             return data;
         }
@@ -12,7 +12,7 @@ museum.algorithms.quick_sort = (function() {
         var greater = []
 
         data.forEach(function(el) {
-            if (el <= pivot) {
+            if (cmp(el, pivot)) {
                 less.push(el)
             } else {
                 greater.push(el)
