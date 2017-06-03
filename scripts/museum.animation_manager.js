@@ -6,15 +6,21 @@ museum.animation_manager = (function() {
     var forceAnimations = [];
     var animationId = 1;
     var currentAnimationId = 0;
-    
+    var index = 0;
+
     function clear() {
         animations = [];
         forceAnimations = [];
         animationId += 1;
+        index = 0;
     }
 
     function shouldSkipAnimation() {
         return $('#skip-animation-checkbox').prop('checked');
+    }
+
+    function isByStep() {
+        return $('#step-animation-checkbox').prop('checked');
     }
 
     function getAnimationDelay(initialDelay) {
@@ -41,12 +47,11 @@ museum.animation_manager = (function() {
         clear();
     }
 
-    function processAnimation(index) {
-        if (!index) {
+    function processAnimation() {
+        if (index == 0) {
             currentAnimationId = animationId;
-            index = 0;
             if (shouldSkipAnimation()) {
-                processForceAnimation(0);
+                processForceAnimation();
                 return;
             }
         }
@@ -58,15 +63,24 @@ museum.animation_manager = (function() {
             return;
         }
         animations[index].block();
-        setTimeout(function() {
-            processAnimation(index + 1);
-        }, getAnimationDelay(animations[index].delay));
+        if (!isByStep()) {
+            setTimeout(function() {
+                index = index + 1;
+                processAnimation();
+            }, getAnimationDelay(animations[index].delay));
+        }
+    }
+
+    function nextAnimation() {
+        index = index + 1;
+        processAnimation();
     }
 
     return {
         clear: clear,
         addForceAnimation: addForceAnimation,
         addAnimation: addAnimation,
-        processAnimation: processAnimation
+        processAnimation: processAnimation,
+        nextAnimation: nextAnimation
     };
 })();
