@@ -695,11 +695,20 @@ museum.network = (function() {
     function formTop() {
         var count = 10;
         var data = setDataToArray(nodes);
-        data = museum.algorithms.quick_sort.quickSort(data, function(first, second) { return first.value <= second.value; });
-        data = data.slice(0, count);
+        data = museum.algorithms.quick_sort.quickSort(data, function(first, second) { return first.value < second.value; });
+        var tracks = {};
+        var tracksCount = 0;
+        var index = data.length - 1;
         var trackIds = [];
-        for (var i = 0; i < data.length; ++i) {
-            trackIds.push(data[i].trackId);
+        while (tracksCount < 10 && index >= 0) {
+            if (tracks[data[index].trackId]) {
+                --index;
+                continue;
+            }
+            trackIds.push(data[index].trackId);
+            tracks[data[index].trackId] = true;
+            --index;
+            ++tracksCount;
         }
         museum.spotify.createPlaylist(fromPlaylist.owner.id, "Top 10 songs", trackIds);
     }

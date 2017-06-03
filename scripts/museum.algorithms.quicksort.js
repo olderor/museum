@@ -7,7 +7,7 @@ museum.algorithms.quick_sort = (function() {
             return data;
         }
         
-        var pivot = data.splice(0, 1)
+        var pivot = data.splice(0, 1)[0];
         var less = []
         var greater = []
 
@@ -19,7 +19,7 @@ museum.algorithms.quick_sort = (function() {
             }
         })
 
-        return quickSort(less).concat(pivot, quickSort(greater))
+        return quickSort(less, cmp).concat(pivot, quickSort(greater, cmp))
     }
 
     return {

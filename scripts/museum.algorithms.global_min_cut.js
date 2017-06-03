@@ -101,6 +101,12 @@ museum.algorithms.global_min_cut = (function() {
         for (var phase = 1; phase < verticesCount; ++phase) {
             var inSet = [];
             var setValues = [];
+            museum.animation_manager.addAnimation({
+                block: function() {
+                    $('#description').text('New phase incoming');
+                },
+                delay: 2000
+            });
             for (var i = 0; i < verticesCount; ++i) {
                 inSet.push(false);
                 setValues.push(0);
@@ -141,7 +147,7 @@ museum.algorithms.global_min_cut = (function() {
 
                 museum.animation_manager.addAnimation({
                     block: function() {
-                        $('#description').text('Vertex found (red)');
+                        $('#description').text('Heavy vertex found (red)');
                     },
                     delay: 0
                 });
@@ -210,7 +216,7 @@ museum.algorithms.global_min_cut = (function() {
 
                 museum.animation_manager.addAnimation({
                     block: function() {
-                        $('#description').text('Vertex found');
+                        $('#description').text('Last vertex found');
                     },
                     delay: 0
                 });
