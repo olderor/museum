@@ -1,6 +1,7 @@
 # museum
 advanced project<br />
-[museum - your collection of music](https://museum-olderor.c9users.io/)<br /><br />
+[museum - your collection of music](http://museum.gear.host)<br />
+[mirror link](https://museum-olderor.c9users.io/)<br /><br />
 [testing available here](https://github.com/olderor/museum/blob/master/testing.md)<br /><br />
 If you don't have spotify account, don't worry!<br />
 You can use free spotify account for testing:<br />
