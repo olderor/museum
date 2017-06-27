@@ -44,7 +44,7 @@
     <script type="text/javascript">
         function init() {
             setTimeout(function() {
-                window.location.href = "https://accounts.spotify.com/authorize/?client_id=88f3563403d64d088769912cab94c1fe&response_type=token&redirect_uri=https%3A%2F%2Fmuseum-olderor.c9users.io%2Fbrowse.html&scope=" +
+                window.location.href = "https://accounts.spotify.com/authorize/?client_id=88f3563403d64d088769912cab94c1fe&response_type=token&redirect_uri=https%3A%2F%2F" + document.domain + "%2Fbrowse.html&scope=" +
                     encodeURIComponent("playlist-read-private playlist-modify-public");
             }, 5000);
         }
