@@ -3,6 +3,8 @@
 
 <head>
     <title>Museum | Playlists</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
 
     <link rel='icon' type="image/png" href="img/logo.png" />
     <link rel='shortcut icon' type="image/png" href="img/logo.png" />
@@ -10,13 +12,19 @@
     <link href="libs/mdbootstrap/css/compiled.min.css" rel="stylesheet">
     <link href="libs/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="libs/mdbootstrap/css/mdb.css" rel="stylesheet">
-    <link href="libs/vis/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <link href="libs/mdbootstrap/css/mdb.css" rel="stylesheet">
+    <link href="libs/jquery/jquery.fileupload.css" rel="stylesheet" type="text/css" />
+    <link href="libs/green-audio-player.min.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="libs/jquery/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.fileupload.js"></script>
     <script type="text/javascript" src="libs/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="libs/mdbootstrap/js/tether.min.js"></script>
     <script type="text/javascript" src="libs/vis/vis.js"></script>
+    <script type="text/javascript" src="libs/green-audio-player.min.js"></script>
 
 
     <link href="styles/main.css" rel="stylesheet" type="text/css" />
@@ -38,6 +46,9 @@
     <script src="scripts/museum.algorithms.max_flow.js"></script>
     <script src="scripts/museum.animation_manager.js"></script>
     <script src="scripts/museum.demos.js"></script>
+    <script src="scripts/museum.audio_uploader.js"></script>
+    <script src="scripts/museum.ml.model.js"></script>
+    <script src="scripts/museum.ml.feature_extractor.js"></script>
 </head>
 
 <body onload="init()">
@@ -215,6 +226,26 @@
         <div id="finish-button-container">
             <button type="button" class="btn btn-primary btn-lg btn-block waves-effect waves-light z-depth-4" onclick="museum.playlists.process();">Finish and go!</button>
         </div>
+        <div style="text-align: center; height: 150px; line-height: 150px;">
+            OR
+        </div>
+        <div class="md-form input-group" id="content-input">
+            <span class="btn btn-primary fileinput-button btn-lg btn-block waves-effect waves-light z-depth-4">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>Upload an audio file to analyze</span>
+                <input id="fileupload" type="file" name="file">
+            </span>
+        </div>
+        <!-- The global progress bar -->
+        <div style="text-align: center; height: 30px; display: none;" id="progress-label">Uploading...</div>
+        <div id="progress" class="progress" style="display: none;">
+            <div class="progress-bar progress-bar-success"></div>
+        </div>
+        <div style="text-align: center; height: 30px; display: none;" id="message-label"></div>
+        <div class="audio-container" style="width: auto; min-width: 300px; display: none;">
+            <audio id="audio-output"></audio>
+        </div>
+        
         <script id="loading-playlist-template" type="text/x-jquery-tmpl">
             <div class="list-group-item playlist-loading-item" id="container-${guid}">
             <a href="${url}" target="_blank" class='d-flex justify-content-start'>
@@ -254,6 +285,9 @@
             museum.playlists.init();
             museum.graphmanager.init();
             museum.demo.init();
+            museum.ml.model.loadModel();
+            museum.audio_uploader.initFileUpload(
+                museum.ml.feature_extractor.extract_features);
         }
     </script>
 </body>
