@@ -169,6 +169,10 @@ canvas, .vis-network {
 
 .reset-button-container {
     position: fixed;
-    bottom: 0;
+    /*bottom: 0;*/
     width: 100%;
+}
+
+.animation-part {
+    display: none !important;
 }

@@ -75,10 +75,27 @@ museum.parser = (function() {
         return image;
     }
     
+    function timeToString(seconds) {
+        var hrs = ~~(seconds / 3600);
+        var mins = ~~((seconds % 3600) / 60);
+        var secs = ~~seconds % 60;
+    
+        var res = "";
+    
+        if (hrs > 0) {
+            res += "" + hrs + ":" + (mins < 10 ? "0" : "");
+        }
+    
+        res += "" + mins + ":" + (secs < 10 ? "0" : "");
+        res += "" + secs;
+        return res;
+    }
+    
     return {
         formatErrorMessage: formatErrorMessage,
         getLinkLocation: getLinkLocation,
         getParameterByName: getParameterByName,
-        getImageWithMinimumSize: getImageWithMinimumSize
+        getImageWithMinimumSize: getImageWithMinimumSize,
+        timeToString: timeToString
     };
 })();

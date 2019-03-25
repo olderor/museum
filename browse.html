@@ -15,6 +15,7 @@
     <link href="libs/mdbootstrap/css/mdb.css" rel="stylesheet">
     <link href="libs/jquery/jquery.fileupload.css" rel="stylesheet" type="text/css" />
     <link href="libs/green-audio-player.min.css" rel="stylesheet" type="text/css" />
+    <link href="libs/vis/vis.min.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="libs/jquery/jquery.tmpl.js"></script>
@@ -23,8 +24,9 @@
     <script type="text/javascript" src="libs/jquery/jquery.fileupload.js"></script>
     <script type="text/javascript" src="libs/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="libs/mdbootstrap/js/tether.min.js"></script>
-    <script type="text/javascript" src="libs/vis/vis.js"></script>
+    <script type="text/javascript" src="libs/vis/vis.min.js"></script>
     <script type="text/javascript" src="libs/green-audio-player.min.js"></script>
+    <script type="text/javascript" src="libs/chart.min.js"></script>
 
 
     <link href="styles/main.css" rel="stylesheet" type="text/css" />
@@ -49,6 +51,7 @@
     <script src="scripts/museum.audio_uploader.js"></script>
     <script src="scripts/museum.ml.model.js"></script>
     <script src="scripts/museum.ml.feature_extractor.js"></script>
+    <script src="scripts/museum.labels_manager.js"></script>
 </head>
 
 <body onload="init()">
@@ -87,7 +90,7 @@
                         <i class="fa fa-chevron-right rotate-icon"></i>
                     </a>
             </li>
-            <li class="nav-item d-flex justify-content-center">
+            <li class="nav-item d-flex justify-content-center animation-part">
               <div class="switch switch-container">
                 <div>By step animation</div>
                 <label class="switch-label d-flex justify-content-center">
@@ -96,7 +99,7 @@
                 </label>
               </div>
             </li>
-            <li id="next-animation-button" class="nav-item d-flex justify-content-center">
+            <li id="next-animation-button" class="nav-item d-flex justify-content-center animation-part">
                 <button type="button" class="btn btn-primary waves-effect waves-light z-depth-4 option-button" onclick="museum.animation_manager.nextAnimation();">Next animation</button>
             </li>
             <li class="nav-item"></li>
@@ -152,13 +155,13 @@
                 <div class="label">Graph labels</div>
                 <div id="label-network"></div>
             </li>
-            <li class="nav-item animation-speed-range-container">
+            <li class="nav-item animation-speed-range-container animation-part">
                 <div class="label">
                     Animation speed
                 </div>
                 <input type="range" min="0.01" max="10" step="0.01" value="1" id="animation-speed" />
             </li>
-            <li class="nav-item d-flex justify-content-center" id="general-graph-item">
+            <li class="nav-item d-flex justify-content-center animation-part" id="general-graph-item">
               <div class="switch switch-container">
                 <div>Skip animation</div>
                 <label class="switch-label d-flex justify-content-center">
@@ -183,6 +186,12 @@
                     <img src="img/logo.png" class="img-fluid flex-center">
                 </div>
             </li>
+            <li class="nav-item" id="demo-header">
+                    <a class="collapsible-header waves-effect arrow-r">
+                        Playlist compilations:
+                    </a>
+            </li>
+            <li class="nav-item"></li>
             <li class="nav-item" id="demo1-item">
                     <a class="collapsible-header waves-effect arrow-r">
                         Demo #1
@@ -216,20 +225,13 @@
         <i id="icon" class="fa fa-angle-double-up" style="text-shadow: none; font-size: 150px; color: rgb(255, 132, 0); height: 175px; width: 175px; line-height: 175px; border-radius: 50%; text-align: center; background-color: rgb(0, 0, 0);"></i>
     </div>
     <div class="content">
-        <div class="md-form input-group" id="content-input">
-            <input type="text" class="form-control" id="spotify-text-input" placeholder="For example, https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W">
-            <label for="spotify-text-input">Enter the link to the playlist:</label>
-            <span class="input-group-btn" style="padding-left: 5px;">
-                <button class="btn btn-success btn-lg waves-effect waves-light z-depth-4" type="button" id="add-playlist-button">Add</button>
-            </span>
+        <div class="wrapper">
+            <div class="flex-center">
+                <img src="img/ai.svg" style="max-height: 150px;">
+            </div>
+            <div class="flex-center" style="margin-top: 10px; color: #ff8400">Powered by Artificial Intelligence</div>
         </div>
-        <div id="finish-button-container">
-            <button type="button" class="btn btn-primary btn-lg btn-block waves-effect waves-light z-depth-4" onclick="museum.playlists.process();">Finish and go!</button>
-        </div>
-        <div style="text-align: center; height: 150px; line-height: 150px;">
-            OR
-        </div>
-        <div class="md-form input-group" id="content-input">
+        <div class="md-form input-group" id="content-input" style="padding-top: 30px; margin-bottom: 0;">
             <span class="btn btn-primary fileinput-button btn-lg btn-block waves-effect waves-light z-depth-4">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>Upload an audio file to analyze</span>
@@ -242,8 +244,26 @@
             <div class="progress-bar progress-bar-success"></div>
         </div>
         <div style="text-align: center; height: 30px; display: none;" id="message-label"></div>
-        <div class="audio-container" style="width: auto; min-width: 300px; display: none;">
+        <div class="audio-container" style="width: auto; min-width: 300px; display: none;" id="audio-container">
             <audio id="audio-output"></audio>
+        </div>
+        <canvas id="audio-labels-chart-container" style="display: none;">
+            
+        </canvas>
+        
+        <div style="text-align: center; height: 150px; line-height: 150px;">
+            OR
+        </div>
+        
+        <div class="md-form input-group" id="content-input">
+            <input type="text" class="form-control" id="spotify-text-input" placeholder="For example, https://open.spotify.com/user/olderor/playlist/3RafC9HqYfvMHTwbkOGe4W">
+            <label for="spotify-text-input">Enter the link to the playlist:</label>
+            <span class="input-group-btn" style="padding-left: 5px;">
+                <button class="btn btn-success btn-lg waves-effect waves-light z-depth-4" type="button" id="add-playlist-button">Add</button>
+            </span>
+        </div>
+        <div id="finish-button-container">
+            <button type="button" class="btn btn-primary btn-lg btn-block waves-effect waves-light z-depth-4" onclick="museum.playlists.process();">Finish and go!</button>
         </div>
         
         <script id="loading-playlist-template" type="text/x-jquery-tmpl">

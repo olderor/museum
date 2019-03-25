@@ -6,15 +6,28 @@ museum.audio_uploader = (function() {
     var filename = undefined;
     
     function showAudioControls() {
-        $('#message-label').slideUp();
-        $('.audio-container').slideDown(1000);
+        if ($('#message-label').is(':visible')) {
+            $('#message-label').slideUp();
+        }
+        if (!$('#audio-container').is(':visible')) {
+            $('#audio-container').slideDown(1000);
+        }
         player.togglePlay();
     }
     
     function hideAudioControls() {
-        $('#progress-label').slideDown();
-        $('#progress').slideDown();
-        $('.audio-container').slideUp();
+        if (!$('#progress-label').is(':visible')) {
+            $('#progress-label').slideDown();
+        }
+        if (!$('#progress').is(':visible')) {
+            $('#progress').slideDown();
+        }
+        if ($('#audio-container').is(':visible')) {
+            $('#audio-container').slideUp();
+        }
+        if ($('#audio-labels-chart-container').is(':visible')) {
+    		$('#audio-labels-chart-container').slideUp();
+        }
         $('#progress .progress-bar').css(
             'width',
             0 + '%'
@@ -23,26 +36,36 @@ museum.audio_uploader = (function() {
     
     function showAudioCorrupted() {
         $('#message-label').html('Look out! The given audio file is corrupted. Please, select correct one.');
+        if (!$('#message-label').is(':visible')) {
+            $('#message-label').slideDown();
+        }
+        
         hideAudioControls();
         hideAudioUploading();
     }
     
     function hideAudioUploading() {
-        $('#progress').slideUp();
-        $('#progress-label').slideUp();
+        if ($('#progress').is(':visible')) {
+            $('#progress').slideUp();
+        }
+        if ($('#progress-label').is(':visible')) {
+            $('#progress-label').slideUp();
+        }
     }
     
     function showAudioUploadingSuccess() {
-        $('#progress').slideUp();
-        $('#progress-label').html('Uploading done. Processing...')
+        if ($('#progress').is(':visible')) {
+            $('#progress').slideUp();
+        }
+        $('#progress-label').html('Uploading done. Predicting genres...');
         showAudioControls();
     }
     
     function initFileUpload(onFileUpload) {
-        player = new GreenAudioPlayer('.audio-container');
+        player = new GreenAudioPlayer('#audio-container');
         var audio = $('#audio-output');
         audio.on('error', function(e) {
-            showAudioCorrupted();
+            // showAudioCorrupted();
         });
         
         $('#fileupload').on('change', function(e) {
@@ -50,7 +73,10 @@ museum.audio_uploader = (function() {
             duration = undefined;
             $('#progress-label').html('Uploading...');
             hideAudioControls();
-            
+            if ($('#message-label').is(':visible')) {
+                $('#message-label').slideUp();
+            }
+            museum.ml.feature_extractor.clear();
             if (e && e.currentTarget && e.currentTarget.files && e.currentTarget.files[0]) {
                 var file = e.currentTarget.files[0];
                 var audioReader = new FileReader();
