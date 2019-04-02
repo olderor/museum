@@ -12,7 +12,8 @@ museum.ml.feature_extractor = (function() {
         }
         $.ajax({
           type: "POST",
-          url: "https://museum-api-olderor.c9users.io/api/extract_features",
+          // "https://museum-api-olderor.c9users.io/api/extract_features"
+          url: "https://museum-back.herokuapp.com/api/extract_features",
           data: JSON.stringify({'filename': filename, 'offset': offset}),
           dataType: 'json',
           contentType:"application/json; charset=utf-8"
