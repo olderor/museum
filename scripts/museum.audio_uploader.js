@@ -87,7 +87,8 @@ museum.audio_uploader = (function() {
             }
         });
         $('#fileupload').fileupload({
-            url: "https://museum-api-olderor.c9users.io/api/upload",
+            // url: "https://museum-api-olderor.c9users.io/api/upload"
+            url: "https://museum-back.herokuapp.com/api/upload",
             type: 'post',
             cache: false,
             dataType: 'json',
