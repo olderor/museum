@@ -8,7 +8,7 @@ museum.ml.model = (function() {
        'International', 'Jazz', 'Metal', 'Reggae', 'Rock'];
     
     async function loadModel() {
-        model = await tf.loadLayersModel('scripts/ml_model/model.json');
+        model = await tf.loadLayersModel('scripts/ml_model/model.js');
     }
     
     function predict(features) {
