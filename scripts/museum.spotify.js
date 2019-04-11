@@ -1,10 +1,11 @@
 var museum = museum || {};
 museum.spotify = museum.spotify || {};
 museum.spotify = (function() {
-
+    var tokenTimer = null;
     var token = null;
     var tokenType = null;
     var expiresIn = null;
+    var expirationTime = null;
     var refreshToken = null;
 
     var apiGetPlaylistInfoUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}";
@@ -84,12 +85,38 @@ museum.spotify = (function() {
         data["guid"] = playlistData.guid;
         getPlaylistInfo(data, onDone, onError);
     }
+    
+    function updateTokenTimeout() {
+        if (tokenTimer) {
+            clearTimeout(tokenTimer);
+        }
+        
+        console.log(expirationTime - Date.now());
+        
+        tokenTimer = setTimeout(function () {
+            $('.relogin-alert').slideDown();
+        }, max(1, expirationTime - Date.now()));
+    }
 
-    function updateUserToken(dataToken, dataTokenType, dataExpiresIn, dataRefreshToken) {
-        token = dataToken;
-        tokenType = dataTokenType;
-        expiresIn = dataExpiresIn;
-        refreshToken = dataRefreshToken;
+    function updateUserToken() {
+        var url = window.location.href.replace('#', '?');
+        
+        token = museum.parser.getParameterByName('access_token', url);
+        tokenType = museum.parser.getParameterByName('token_type', url);
+        expiresIn = museum.parser.getParameterByName('expires_in', url);
+        refreshToken = museum.parser.getParameterByName('refresh_token', url);
+        
+        updateTokenTimeout();
+        
+        saveToStorage();
+    }
+    
+    function saveToStorage() {
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('tokenType', tokenType);
+        sessionStorage.setItem('expiresIn', expiresIn); // expiresIn
+        sessionStorage.setItem('expirationTime', Date.now() + (expiresIn - 120) * 1000);
+        sessionStorage.setItem('refreshToken', refreshToken);
     }
 
     function init() {
@@ -99,11 +126,20 @@ museum.spotify = (function() {
             window.location.href = "authorization.html";
             return;
         }
+        
+        token = sessionStorage.getItem('token');
+        tokenType = sessionStorage.getItem('tokenType');
+        expiresIn = sessionStorage.getItem('expiresIn');
+        expirationTime = parseInt(sessionStorage.getItem('expirationTime'));
+        refreshToken = sessionStorage.getItem('refreshToken');
+        updateTokenTimeout();
 
+        /*
         token = museum.parser.getParameterByName('access_token', url);
         tokenType = museum.parser.getParameterByName('token_type', url);
         expiresIn = museum.parser.getParameterByName('expires_in', url);
         refreshToken = museum.parser.getParameterByName('refresh_token', url);
+        */
     }
 
 

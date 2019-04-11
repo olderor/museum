@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Museum | Redirecting</title>
+
+    <script type="text/javascript" src="libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="libs/jquery/jquery.tmpl.js"></script>
+
+    <script src="scripts/extensions.js"></script>
+    <script src="scripts/museum.parser.js"></script>
+    <script src="scripts/museum.random.js"></script>
+    <script src="scripts/museum.spotify.js"></script>
+    <script src="scripts/museum.waiting.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        museum.spotify.updateUserToken();
+        window.location.href = "browse.html";
+    </script>
+</body>
+
+</html>

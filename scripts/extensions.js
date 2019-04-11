@@ -66,3 +66,11 @@ Object.size = function(obj) {
 Array.prototype.argMax = Array.prototype.argMax || function() {
     return this.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
 };
+
+function min(a, b) {
+    return a < b ? a: b;
+}
+
+function max(a, b) {
+    return a > b ? a: b;
+}

@@ -55,7 +55,6 @@
 </head>
 
 <body onload="init()">
-    
     <div id="network-container" class="data-container full-size" style="display: none;">
         
         
@@ -64,6 +63,11 @@
             <li class="nav-item">
                 <div class="logo-wrapper waves-light logo-nav">
                     <img src="img/logo.png" class="img-fluid flex-center">
+                </div>
+            </li>
+            <li class="nav-item relogin-alert" style="display: none;">
+                <div class="alert alert-warning" role="alert" style="padding: 8px; margin: 0;">
+                    <a href="index.html" style="line-height: 25px; padding: 0; text-align: center; width: 224px; font-size: 15px;">Your spotify session has expired.<br>Click here to relogin.</a>
                 </div>
             </li>
             <li class="nav-item nav-item-selected" id="tracks-general-graph-item">
@@ -184,6 +188,11 @@
             <li class="nav-item">
                 <div class="logo-wrapper waves-light logo-nav">
                     <img src="img/logo.png" class="img-fluid flex-center">
+                </div>
+            </li>
+            <li class="nav-item relogin-alert" style="display: none;">
+                <div class="alert alert-warning" role="alert" style="padding: 8px; margin: 0;">
+                    <a href="index.html" style="line-height: 25px; padding: 0; text-align: center; width: 224px; font-size: 15px;">Your spotify session has expired.<br>Click here to relogin.</a>
                 </div>
             </li>
             <li class="nav-item" id="demo-header">
