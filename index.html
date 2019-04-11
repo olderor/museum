@@ -43,8 +43,10 @@
     
     <script type="text/javascript">
         setTimeout(function() {
-            window.location.href = "https://accounts.spotify.com/authorize/?client_id=88f3563403d64d088769912cab94c1fe&response_type=token&redirect_uri=https%3A%2F%2F" + document.domain + "%2Fsave.html&scope=" +
-                encodeURIComponent("playlist-read-private playlist-modify-public");
+            window.location.href = "https://accounts.spotify.com/authorize/?" +
+                "client_id=88f3563403d64d088769912cab94c1fe&response_type=token&scope=" +
+                encodeURIComponent("playlist-read-private playlist-modify-public") +
+                "&redirect_uri=https%3A%2F%2F" + document.domain + "%2Fsave.html";
         }, 5000);
     </script>
 </body>

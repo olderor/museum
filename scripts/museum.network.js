@@ -648,7 +648,7 @@ museum.network = (function() {
             trackIds.push(track);
         }
         if (trackIds.length != 0) {
-            museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+            museum.spotify.createPlaylist("Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         }
         museum.animation_manager.processAnimation();
     }
@@ -676,7 +676,7 @@ museum.network = (function() {
             trackIds.push(track);
         }
         if (trackIds.length != 0) {
-            museum.spotify.createPlaylist(fromPlaylist.owner.id, "Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
+            museum.spotify.createPlaylist("Discover from " + fromPlaylist.name + " to " + toPlaylist.name, trackIds);
         }
         museum.animation_manager.processAnimation();
     }
@@ -710,7 +710,7 @@ museum.network = (function() {
             --index;
             ++tracksCount;
         }
-        museum.spotify.createPlaylist(fromPlaylist.owner.id, "Top 10 songs", trackIds);
+        museum.spotify.createPlaylist("Top 10 songs", trackIds);
     }
 
     return {

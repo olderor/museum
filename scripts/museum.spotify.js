@@ -12,6 +12,7 @@ museum.spotify = (function() {
     var apiGetAccessToken = "https://accounts.spotify.com/api/token";
     var apiCreatePlaylistUrl = "https://api.spotify.com/v1/users/{user_id}/playlists";
     var apiAddTracksToPlaylistUrl = "https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks";
+    var apiGetUserInfo = "https://api.spotify.com/v1/me"
     var playlistUrl = "http://open.spotify.com/user/{user_id}/playlist/{playlist_id}";
 
     /**
@@ -90,8 +91,6 @@ museum.spotify = (function() {
         if (tokenTimer) {
             clearTimeout(tokenTimer);
         }
-        
-        console.log(expirationTime - Date.now());
         
         tokenTimer = setTimeout(function () {
             $('.relogin-alert').slideDown();
@@ -245,9 +244,17 @@ museum.spotify = (function() {
         });
     }
 
-    function createPlaylist(userId, name, tracks) {
-        createEmptyPlaylist(userId, name, function(data) {
-            addTracksToPlaylists(userId, data["id"], tracks, 0, data['']);
+    function createPlaylist(name, tracks) {
+        $.ajax({
+            url: apiGetUserInfo,
+            type: 'get',
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        }).done(function(userInfo) {
+            createEmptyPlaylist(userInfo.id, name, function(data) {
+                addTracksToPlaylists(userInfo.id, data["id"], tracks, 0, data['']);
+            });
         });
     }
 
