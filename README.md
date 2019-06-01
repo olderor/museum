@@ -6,7 +6,7 @@ Additionally, you can upload your own audio file to analyze its melody. Artifici
 
 Spotify API is used to get information about the songs and playlists. I have used Push–relabel maximum flow and Minimum cut algorithms to analyze the given data.
 
-[museum - your collection of music](http://museum.gear.host)<br />
+[museum - your collection of music](https://museum.gear.host)<br />
 
 If you don't have a Spotify account, don't worry!<br />
 You can use this free spotify account for testing:<br />
